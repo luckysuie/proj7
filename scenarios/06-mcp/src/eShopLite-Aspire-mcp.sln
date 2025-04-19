@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 Services", "5 Services", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{1578A6C6-3977-4850-AC6B-A9F718CC6C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkInformationAgent", "ParkInformationAgent\ParkInformationAgent.csproj", "{E5372260-D25E-E3B1-D552-77B821E06530}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{1578A6C6-3977-4850-AC6B-A9F718CC6C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1578A6C6-3977-4850-AC6B-A9F718CC6C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1578A6C6-3977-4850-AC6B-A9F718CC6C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5372260-D25E-E3B1-D552-77B821E06530}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5372260-D25E-E3B1-D552-77B821E06530}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5372260-D25E-E3B1-D552-77B821E06530}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5372260-D25E-E3B1-D552-77B821E06530}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{55ACC9AF-0879-87FB-6B3E-C52897712A9C} = {C3D968D2-11E8-4A3B-A89C-E9E1DEA82B56}
 		{9CEFC040-5070-FF2D-F88A-5E9F8172BF6D} = {C3D968D2-11E8-4A3B-A89C-E9E1DEA82B56}
 		{1578A6C6-3977-4850-AC6B-A9F718CC6C8E} = {005B26BC-7F41-4BA1-AA6A-2F85CCF3FA5D}
+		{E5372260-D25E-E3B1-D552-77B821E06530} = {C3D968D2-11E8-4A3B-A89C-E9E1DEA82B56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9C7AE25-263B-4A02-9BC0-632370BB1004}

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\eShopMcpSseServer\eShopMcpSseServer.csproj" />
     <ProjectReference Include="..\OnlineResearcher\OnlineResearcher.csproj" />
+    <ProjectReference Include="..\ParkInformationAgent\ParkInformationAgent.csproj" />
     <ProjectReference Include="..\Products\Products.csproj" />
     <ProjectReference Include="..\Store\Store.csproj" />
     <ProjectReference Include="..\WeatherAgent\WeatherAgent.csproj" />

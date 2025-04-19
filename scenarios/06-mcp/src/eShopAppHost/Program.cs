@@ -12,6 +12,9 @@ var products = builder.AddProject<Projects.Products>("products")
 var onlineresearcher = builder.AddProject<Projects.OnlineResearcher>("onlineresearcher")
     .WithExternalHttpEndpoints();
 
+var parkinformationagent = builder.AddProject<Projects.ParkInformationAgent>("parkinformationagent")
+    .WithExternalHttpEndpoints();
+
 var weatheragent = builder.AddProject<Projects.WeatherAgent>("weatheragent")
     .WithExternalHttpEndpoints();
 
@@ -22,6 +25,8 @@ var eshopmcpserver = builder.AddProject<Projects.eShopMcpSseServer>("eshopmcpser
     .WaitFor(products)
     .WithReference(weatheragent)
     .WaitFor(weatheragent)
+    .WithReference(parkinformationagent)
+    .WaitFor(parkinformationagent)
     .WithExternalHttpEndpoints();
 
 var store = builder.AddProject<Projects.Store>("store")
