@@ -90,6 +90,14 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 
 ![eShopLite Aplication running doing search using keyworkd search](./images/06eShopLite-SearchSemantic.gif)
 
+This is the eShopLite Application running the **Realtime Audio** feature:
+
+![eShopLite Application running the Realtime Audio feature](./images/07eShopLite-RealtimeAudio.gif)
+
+This is the eShopLite Application using the **DeepSeek-R1 Reasoning Model**:
+
+![eShopLite Application using the DeepSeek-R1 Reasoning Model](./images/07ReasoningSearch.png)
+
 The Aspire Dashboard to check the running services:
 
 ![Aspire Dashboard to check the running services](./images/10AzureResources.png)
