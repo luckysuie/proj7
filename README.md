@@ -66,9 +66,7 @@ The project includes several scenarios demonstrating different capabilities:
 
     It will prompt you to provide an `azd` environment name (like "eShopLite"), select a subscription from your Azure account, and select a [location where the necessary models, like gpt-4o-mini and ADA-002 are available](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/?products=cognitive-services&regions=all), a sample region can be "eastus2".
 
-
 ### Quickstart
-(Add steps to get up and running quickly)
 
 1. Navigate to a specific scenario folder (e.g., `scenarios/01-SemanticSearch/`)
 2. Follow the README instructions in that scenario folder
@@ -76,13 +74,30 @@ The project includes several scenarios demonstrating different capabilities:
 
 ## Demo
 
-A demo app is included to show how to use the project.
-
 To run the demo, follow these steps:
 
 1. Navigate to the specific scenario folder
 2. Follow the "Run the solution" instructions in that scenario's README
 3. Access the application via the URLs provided in the console output
+
+## Sample Application
+
+This is the eShopLite Aplication running, performing a **Keyword Search**:
+
+![eShopLite Aplication running doing search using keyworkd search](./images/05eShopLite-SearchKeyWord.gif)
+
+This is the eShopLite Aplication running, performing a **Semantic Search**:
+
+![eShopLite Aplication running doing search using keyworkd search](./images/06eShopLite-SearchSemantic.gif)
+
+The Aspire Dashboard to check the running services:
+
+![Aspire Dashboard to check the running services](./images/10AzureResources.png)
+
+The Azure Resource Group with all the deployed services:
+
+![Azure Resource Group with all the deployed services](./images/15AspireDashboard.png)
+
 
 ## Resources
 
