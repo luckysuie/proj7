@@ -1,3 +1,7 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
+[![Twitter: elbruno](https://img.shields.io/twitter/follow/elbruno.svg?style=social)](https://twitter.com/elbruno)
+![GitHub: elbruno](https://img.shields.io/github/followers/elbruno?style=social)
+
 # Project Name
 
 (short, 1-3 sentenced, description of the project)
