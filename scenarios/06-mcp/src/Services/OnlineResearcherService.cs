@@ -1,7 +1,8 @@
 ﻿using McpToolsEntities;
-using Store.Services;
+using Microsoft.Extensions.Logging;
+using System.Net.Http.Json;
 
-namespace eShopMcpSseServer.Services;
+namespace Services;
 
 public class OnlineResearcherService
 {

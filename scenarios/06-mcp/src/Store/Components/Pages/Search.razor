@@ -1,8 +1,9 @@
 ﻿@page "/search"
 @using Markdig
 @using SearchEntities
+@using global::Services
 
-@inject Store.Services.ProductService ProductService
+@inject ProductService ProductService
 @inject Store.Services.McpServerService McpServerService
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]

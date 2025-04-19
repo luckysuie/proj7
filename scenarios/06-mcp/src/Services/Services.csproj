@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\DataEntities\DataEntities.csproj" />
+		<ProjectReference Include="..\McpToolsEntities\McpToolsEntities.csproj" />
 		<ProjectReference Include="..\SearchEntities\SearchEntities.csproj" />
 	</ItemGroup>
 

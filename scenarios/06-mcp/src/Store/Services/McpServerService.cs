@@ -2,6 +2,7 @@
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
 using SearchEntities;
+using Services;
 
 namespace Store.Services;
 

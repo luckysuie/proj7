@@ -4,6 +4,7 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using OpenAI;
 using OpenAI.Chat;
+using Services;
 using Store.Components;
 using Store.Services;
 

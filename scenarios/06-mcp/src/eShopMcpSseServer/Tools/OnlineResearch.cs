@@ -1,8 +1,8 @@
-﻿using eShopMcpSseServer.Services;
-using McpToolsEntities;
+﻿using McpToolsEntities;
 using ModelContextProtocol.Server;
 using OpenAI.Chat;
 using SearchEntities;
+using Services;
 using Store.Services;
 using System.ComponentModel;
 
