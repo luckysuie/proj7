@@ -24,12 +24,12 @@ The project includes several scenarios demonstrating different capabilities:
 
 | Scenario | Description |
 |----------|-------------|
-| [01-SemanticSearch](./scenarios/01-SemanticSearch/) | A reference .NET application implementing an eCommerce site with Search features using Keyword Search and Semantic Search. |
-| [02-AzureAISearch](./scenarios/02-AzureAISearch/) | Implements an eCommerce site with Keyword Search using SQL queries and Semantic Search with Vector Database and Azure AI Search. |
-| [03-RealtimeAudio](./scenarios/03-RealtimeAudio/) | Extends the eCommerce site with advanced search features and real-time audio capabilities powered by the GPT-4o Realtime Audio API. |
-| [04-chromadb](./scenarios/04-chromadb/) | Implements semantic search functionality using Chroma DB, an open-source database designed for AI applications. |
-| [05-deepseek](./scenarios/05-deepseek/) | Demonstrates integration of the DeepSeek-R1 model for enhanced semantic understanding and search capabilities. |
-| [06-mcp](./scenarios/06-mcp/) | Implements the Model Context Protocol (MCP) for advanced AI interactions. |
+| [01 - Semantic Search](./scenarios/01-SemanticSearch/) | A reference .NET application implementing an eCommerce site with Search features using Keyword Search and Semantic Search. |
+| [02 - Azure AI Search](./scenarios/02-AzureAISearch/) | Implements an eCommerce site with Keyword Search using SQL queries and Semantic Search with Vector Database and Azure AI Search. |
+| [03 - Realtime Audio](./scenarios/03-RealtimeAudio/) | Extends the eCommerce site with advanced search features and real-time audio capabilities powered by the GPT-4o Realtime Audio API. |
+| [04 - Chroma DB](./scenarios/04-chromadb/) | Implements semantic search functionality using Chroma DB, an open-source database designed for AI applications. |
+| [05 - DeepSeek](./scenarios/05-deepseek/) | Demonstrates integration of the DeepSeek-R1 model for enhanced semantic understanding and search capabilities. |
+| [06 - MCP, Server and Client implementation](./scenarios/06-mcp/) | Implements the Model Context Protocol (MCP) for advanced AI interactions. |
 
 ## Getting Started
 
