@@ -8,7 +8,7 @@ namespace McpSample.AspNetCoreSseServer;
 [McpServerToolType]
 public static class WeatherTool
 {
-    [McpServerTool, Description("Returns the weather for a specific city using the city name.")]
+    [McpServerTool, Description("Returns the current weather forecast for a city.")]
     public static async Task<WeatherToolResponse> GetWeatherForCity(
         WeatherService weatherService,
         ILogger<ProductService> logger,
@@ -23,7 +23,6 @@ public static class WeatherTool
         Console.WriteLine($"Function End WeatherTool");
         Console.WriteLine("==========================");
 
-        return response;
-        
+        return response;        
     }
 }

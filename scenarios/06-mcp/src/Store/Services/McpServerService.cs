@@ -27,9 +27,7 @@ public class McpServerService
     public IList<McpClientTool> GetTools()
     {
         return tools;
-    }
-
-    public async Task<SearchResponse?> Search(string searchTerm)
+    }    public async Task<SearchResponse?> Search(string searchTerm, IList<McpClientTool>? selectedTools = null)
     {
         try
         {
@@ -39,7 +37,7 @@ public class McpServerService
 
             ChatOptions chatOptions = new ChatOptions
             {
-                Tools = [.. tools],
+                Tools = selectedTools != null && selectedTools.Any() ? [.. selectedTools] : [.. tools],
                 ToolMode = ChatToolMode.RequireAny
             };
 
