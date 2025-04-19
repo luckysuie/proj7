@@ -3,6 +3,7 @@ using McpToolsEntities;
 using ModelContextProtocol.Server;
 using OpenAI.Chat;
 using SearchEntities;
+using Store.Services;
 using System.ComponentModel;
 
 namespace eShopMcpSseServer.Tools;

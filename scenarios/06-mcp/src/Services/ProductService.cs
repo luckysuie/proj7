@@ -1,6 +1,8 @@
 ﻿using SearchEntities;
 using DataEntities;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using System.Net.Http.Json;
 
 namespace Store.Services;
 

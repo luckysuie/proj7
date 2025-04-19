@@ -1,7 +1,7 @@
 using eShopMcpSseServer.Services;
-using ModelContextProtocol;
 using OpenAI;
 using OpenAI.Chat;
+using Store.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
