@@ -9,7 +9,8 @@ namespace eShopMcpSseServer.Tools;
 [McpServerToolType]
 public static class Products 
 {
-    [McpServerTool(Name = "SemanticSearchProducts"), Description("Performs a search in the outdoor products catalog. Returns a text with the found products")]
+    [McpServerTool(Name = "SemanticSearchProducts"), 
+        Description("Performs a search in the outdoor products catalog. Returns a text with the found products")]
     public static async Task<ProductsSearchToolResponse> SemanticSearchProducts(
         ProductService productService,
         ILogger<ProductService> logger,
