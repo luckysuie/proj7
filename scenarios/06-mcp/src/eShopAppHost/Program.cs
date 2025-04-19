@@ -12,11 +12,16 @@ var products = builder.AddProject<Projects.Products>("products")
 var onlineresearcher = builder.AddProject<Projects.OnlineResearcher>("onlineresearcher")
     .WithExternalHttpEndpoints();
 
+var weatheragent = builder.AddProject<Projects.WeatherAgent>("weatheragent")
+    .WithExternalHttpEndpoints();
+
 var eshopmcpserver = builder.AddProject<Projects.eShopMcpSseServer>("eshopmcpserver")
     .WithReference(onlineresearcher)
     .WaitFor(onlineresearcher)
     .WithReference(products)
     .WaitFor(products)
+    .WithReference(weatheragent)
+    .WaitFor(weatheragent)
     .WithExternalHttpEndpoints();
 
 var store = builder.AddProject<Projects.Store>("store")
