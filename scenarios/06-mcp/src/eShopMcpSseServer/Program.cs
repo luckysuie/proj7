@@ -1,7 +1,6 @@
 using OpenAI;
 using OpenAI.Chat;
 using Services;
-using Store.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
