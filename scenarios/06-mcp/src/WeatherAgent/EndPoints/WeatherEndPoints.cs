@@ -25,8 +25,13 @@ public static class WeatherEndPoints
             .Produces(StatusCodes.Status404NotFound);
     }
 
-    internal static async Task<string> GetWeatherAsync(string city, HttpClient httpClient, ILogger<Program> logger, IConfiguration config)
+    internal static async Task<WeatherToolResponse> GetWeatherAsync(string city, HttpClient httpClient, ILogger<Program> logger, IConfiguration config)
     {
+        WeatherToolResponse response = new WeatherToolResponse
+        {
+            CityName = city,
+            WeatherCondition = string.Empty
+        };
         try
         {
             var geoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={Uri.EscapeDataString(city)}&count=1";
@@ -39,14 +44,16 @@ public static class WeatherEndPoints
 
             var weather = weatherResponse?.current_weather;
 
-            return weather is null
+            response.WeatherCondition =  weather is null
                 ? $"Could not retrieve weather data for {city}"
                 : $"Current temperature in {city} is {weather.temperature}°C with wind speed {weather.windspeed} km/h.";
         }
         catch (Exception ex)
         {
-            return $"Error fetching weather: {ex.Message}";
+            logger.LogError(ex, $"Error retrieving weather data for {city}");
+            response.WeatherCondition = $"Error retrieving weather data: {ex.Message}";
         }
+        return response;
     }
 
     private static (string lat, string lon) GetFormatedCoordinates(GeoResponse? geoResponse, string city)

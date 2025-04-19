@@ -1,5 +1,6 @@
 ﻿using McpToolsEntities;
 using ModelContextProtocol.Server;
+using Services;
 using System.ComponentModel;
 
 namespace McpSample.AspNetCoreSseServer;
@@ -7,28 +8,22 @@ namespace McpSample.AspNetCoreSseServer;
 [McpServerToolType]
 public static class WeatherTool
 {
-    [McpServerTool, Description("Returns the current weather for a specific city. Important this tool returns mock generated data.")]
-    public static WeatherToolResponse GetWeatherForCity(string cityName)
+    [McpServerTool, Description("Returns the weather for a specific city using the city name.")]
+    public static async Task<WeatherToolResponse> GetWeatherForCity(
+        WeatherService weatherService,
+        ILogger<ProductService> logger,
+        IMcpServer currentMcpServer,
+        [Description("The name of the city to get the weather information")] string cityName)
     {
         Console.WriteLine("==========================");
         Console.WriteLine($"Function Start WeatherTool: GetWeatherForCity called with cityName: {cityName}");
 
-        // generate a random weather report and return the result
-        var random = new Random();
-        var temperature = random.Next(-20, 40);
-        var condition = random.Next(0, 2) == 0 ? "Sunny" : "Rainy";
-        var humidity = random.Next(0, 100);
-        var windSpeed = random.Next(0, 20);
-        var report = $"Weather in {cityName}: {temperature}°C, {condition}, Humidity: {humidity}%, Wind Speed: {windSpeed} km/h";
-       
-        Console.WriteLine("Function report: " + report);
-        Console.WriteLine($"Function End WeatherTool: GetWeatherForCity called with cityName: {cityName}");
+        var response = await weatherService.GetWeather(cityName);
+
+        Console.WriteLine($"Function End WeatherTool");
         Console.WriteLine("==========================");
 
-        return new WeatherToolResponse
-        {
-            CityName = cityName,
-            WeatherCondition = report
-        }; ;
+        return response;
+        
     }
 }
