@@ -208,8 +208,8 @@ else if (!string.IsNullOrEmpty(errorMessage))
                 // Get only the selected tools
                 var selectedToolsList = GetSelectedTools();
                 
-                // mcp search with selected tools
-                searchResponse = await McpServerService.Search(searchTerm, selectedToolsList);
+                // mcp search with both complete tools and selected tools
+                searchResponse = await McpServerService.Search(searchTerm, tools, selectedToolsList);
             }
             else
             {

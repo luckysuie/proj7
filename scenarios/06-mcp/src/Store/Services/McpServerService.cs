@@ -3,6 +3,7 @@ using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
 using SearchEntities;
 using Services;
+using System.Text;
 
 namespace Store.Services;
 
@@ -27,18 +28,23 @@ public class McpServerService
     public IList<McpClientTool> GetTools()
     {
         return tools;
-    }    public async Task<SearchResponse?> Search(string searchTerm, IList<McpClientTool>? selectedTools = null)
+    }
+
+    public async Task<SearchResponse?> Search(string searchTerm,
+        IList<McpClientTool>? tools = null,
+        IList<McpClientTool>? selectedTools = null)
     {
         try
         {
             // init chat messages
+            var systemMessage = CreateSystemMessage(tools, selectedTools);
             ChatMessages = [];
-            ChatMessages.Add(new ChatMessage(ChatRole.System, "You are a helpful assistant. You always replies using text and emojis. You only do what the user ask you to do. If you don't have a function or a tool to answer a question, you just answer que question."));
+            ChatMessages.Add(new ChatMessage(ChatRole.System, systemMessage));
 
             ChatOptions chatOptions = new ChatOptions
             {
-                Tools = selectedTools != null && selectedTools.Any() ? [.. selectedTools] : [.. tools],
-                ToolMode = ChatToolMode.RequireAny
+                Tools = tools.ToArray(),
+                ToolMode = ChatToolMode.Auto
             };
 
             // call the desired Endpoint
@@ -145,4 +151,38 @@ public class McpServerService
         }
     }
 
+    private string CreateSystemMessage(IList<McpClientTool> allTools, IList<McpClientTool> selectedTools)
+    {
+        // Start with the original system message
+        StringBuilder message = new("You are a helpful assistant. You always replies using text and emojis. You only do what the user ask you to do. If you don't have a function or a tool to answer a question, you just answer the question.");
+        
+        message.AppendLine();
+        message.AppendLine();
+        message.AppendLine("# Tool Usage Instructions");
+        
+        // Add information about all tools and which ones are selected
+        if (allTools != null && allTools.Any())
+        {
+            message.AppendLine("You have access to the following tools, but you must ONLY use the tools that are explicitly marked as 'ALLOWED':");
+            message.AppendLine();
+            
+            foreach (var tool in allTools)
+            {
+                bool isSelected = selectedTools != null && selectedTools.Any(t => t.Name == tool.Name);
+                
+                message.AppendLine($"- {tool.Name}: {tool.Description}");
+                message.AppendLine($"  Status: {(isSelected ? "ALLOWED" : "NOT ALLOWED")}");
+                if (!isSelected)
+                {
+                    message.AppendLine($"  DO NOT USE the {tool.Name} tool even if it seems appropriate for the query.");
+                }
+                message.AppendLine();
+            }
+            
+            message.AppendLine("Important: Only use tools marked as ALLOWED. If none of the allowed tools can help with the user's request, respond using only your knowledge without calling any tools.");
+        }
+        
+        
+        return message.ToString();
+    }    
 }

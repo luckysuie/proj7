@@ -8,8 +8,14 @@ namespace McpSample.AspNetCoreSseServer;
 [McpServerToolType]
 public static class WeatherTool
 {
+    /// <summary>
+    /// Sample prompts that trigger this function:
+    /// 1. "What's the current weather in Seattle?"
+    /// 2. "Tell me the weather forecast for New York City"
+    /// 3. "How is the weather in Paris today?"
+    /// </summary>
     [McpServerTool(Name = "GetWeatherForCity"), 
-        Description("Returns the current weather forecast for a city.")]
+        Description("Retrieves the current weather conditions for a specified city. Use this function when the user asks about weather in a specific location. Returns both the city name and a textual description of current weather conditions.")]
     public static async Task<WeatherToolResponse> GetWeatherForCity(
         WeatherService weatherService,
         ILogger<ProductService> logger,
