@@ -19,7 +19,8 @@
     <div class="input-group mb-3">
         <input type="text" id="search" class="form-control" @bind="searchTerm" placeholder="Enter search term..." />
         <button id="btnSearch" class="btn btn-primary" @onclick="DoSearch" type="submit">Search</button>
-    </div>    @if (tools != null && tools.Any())
+    </div>
+    @if (tools != null && tools.Any())
     {
         <div class="card mb-3">
             <div class="card-header" @onclick="ToggleToolsInfo" style="cursor: pointer;">
@@ -33,7 +34,13 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Use</th>
+                                <th>
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               id="areAllToolsSelected"
+                                               type="checkbox" @onchange="ToggleAllTools" />
+                                    </div>
+                                </th>
                                 <th>Name</th>
                                 <th>Description</th>
                             </tr>
@@ -148,6 +155,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
     private IList<ModelContextProtocol.Client.McpClientTool> tools;
     private Dictionary<string, bool> selectedTools = new();
     private MarkdownPipeline markdownPipeline;
+    private bool areAllToolsSelected;
 
     // Computed property to determine if MCP search should be used based on selected tools
     private bool mcpSearch => selectedTools.Any(t => t.Value); protected override void OnInitialized()
@@ -205,7 +213,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
             searchResponse = new();
             // Get only the selected tools
             var selectedToolsList = GetSelectedTools();
-            
+
             // Validate that at least one tool is selected
             if (selectedToolsList.Count == 0)
             {
@@ -234,5 +242,17 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
     private void ToggleToolsInfo()
     {
         showToolsInfo = !showToolsInfo;
+    }
+
+    private void ToggleAllTools(ChangeEventArgs e)
+    {
+        areAllToolsSelected = (bool)e.Value;
+
+        foreach (var tool in tools)
+        {
+            selectedTools[tool.Name] = areAllToolsSelected;
+        }
+
+        StateHasChanged();
     }
 }

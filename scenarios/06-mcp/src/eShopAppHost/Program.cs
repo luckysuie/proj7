@@ -30,8 +30,6 @@ var eshopmcpserver = builder.AddProject<Projects.eShopMcpSseServer>("eshopmcpser
     .WithExternalHttpEndpoints();
 
 var store = builder.AddProject<Projects.Store>("store")
-    .WithReference(products)
-    .WaitFor(products)
     .WithReference(eshopmcpserver)
     .WaitFor(eshopmcpserver)
     .WithExternalHttpEndpoints();
