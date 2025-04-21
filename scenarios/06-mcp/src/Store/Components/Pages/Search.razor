@@ -18,9 +18,9 @@
     <label for="search" class="form-label">Type your question:</label>
     <div class="input-group mb-3">
         <input type="text" id="search" class="form-control" @bind="searchTerm" placeholder="Enter search term..." />
-        <button id="btnSearch" class="btn btn-primary" @onclick="DoSearch" type="submit">Search</button>
+        <button id="btnSearch" class="btn btn-primary" @onclick="DoSearch" type="submit" disabled="@isLoading">Search</button>
     </div>
-    @if (tools != null && tools.Any())
+    @if (tools?.Any() == true)
     {
         <div class="card mb-3">
             <div class="card-header" @onclick="ToggleToolsInfo" style="cursor: pointer;">
@@ -29,7 +29,7 @@
                     <i class="@(showToolsInfo ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></i>
                 </div>
             </div>
-            <div class="collapse @(showToolsInfo ? "show" : "")" id="toolsDetails">
+            <div class="collapse @(showToolsInfo ? "show" : "")">
                 <div class="card-body">
                     <table class="table">
                         <thead>
@@ -53,7 +53,7 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox"
                                                    @onchange="e => ToggleToolSelection(tool, (bool)e.Value)"
-                                                   checked="@IsToolSelected(tool)" />
+                                                   checked="@selectedTools.GetValueOrDefault(tool.Name, false)" />
                                         </div>
                                     </td>
                                     <td>@tool.Name</td>
@@ -79,7 +79,7 @@
                 <i class="@(showFunctionInfo ? "oi oi-chevron-top" : "oi oi-chevron-bottom")"></i>
             </div>
         </div>
-        <div class="collapse @(showFunctionInfo ? "show" : "")" id="functionCallDetails">
+        <div class="collapse @(showFunctionInfo ? "show" : "")">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4"><strong>Function Call ID:</strong></div>
@@ -116,7 +116,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
         @errorMessage
     </div>
 }
-@if (searchResponse.Products != null && searchResponse.Products.Count > 0)
+@if (searchResponse.Products?.Count > 0)
 {
     <div>
         <h2>Product List</h2>
@@ -133,8 +133,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
                 @foreach (var product in searchResponse.Products)
                 {
                     <tr>
-                        <!-- Simulating images being hosted on a CDN -->
-                        <td><img height="80" width="80" src="@product.ImageUrl" /></td>
+                        <td><img height="80" width="80" src="@product.ImageUrl" alt="@product.Name" /></td>
                         <td>@product.Name</td>
                         <td>@product.Description</td>
                         <td>@product.Price</td>
@@ -147,26 +146,26 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
 
 @code {
     private SearchResponse searchResponse = new();
-    private string searchTerm = "";
-    private bool isLoading = false;
-    private string errorMessage = "";
-    private bool showFunctionInfo = false;
-    private bool showToolsInfo = false;
-    private IList<ModelContextProtocol.Client.McpClientTool> tools;
+    private string searchTerm = string.Empty;
+    private bool isLoading;
+    private string errorMessage = string.Empty;
+    private bool showFunctionInfo;
+    private bool showToolsInfo;
+    private IList<ModelContextProtocol.Client.McpClientTool> tools = new List<ModelContextProtocol.Client.McpClientTool>();
     private Dictionary<string, bool> selectedTools = new();
     private MarkdownPipeline markdownPipeline;
     private bool areAllToolsSelected;
 
-    // Computed property to determine if MCP search should be used based on selected tools
-    private bool mcpSearch => selectedTools.Any(t => t.Value); protected override void OnInitialized()
+    private bool mcpSearch => selectedTools.Values.Any(v => v);
+
+    protected override void OnInitialized()
     {
-        tools = McpServerService.GetTools();
+        tools = McpServerService.GetTools() ?? new List<ModelContextProtocol.Client.McpClientTool>();
 
         markdownPipeline = new MarkdownPipelineBuilder()
-        .UseAdvancedExtensions()
-        .Build();
+            .UseAdvancedExtensions()
+            .Build();
 
-        // Initialize the selectedTools dictionary with all tools unselected
         foreach (var tool in tools)
         {
             selectedTools[tool.Name] = false;
@@ -176,52 +175,35 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
     private void ToggleToolSelection(ModelContextProtocol.Client.McpClientTool tool, bool isSelected)
     {
         selectedTools[tool.Name] = isSelected;
-        StateHasChanged();
-    }
-
-    private bool IsToolSelected(ModelContextProtocol.Client.McpClientTool tool)
-    {
-        if (selectedTools.TryGetValue(tool.Name, out bool value))
-        {
-            return value;
-        }
-        return false;
     }
 
     private IList<ModelContextProtocol.Client.McpClientTool> GetSelectedTools()
     {
-        if (!mcpSearch)
-            return new List<ModelContextProtocol.Client.McpClientTool>();
-
-        return tools.Where(t => IsToolSelected(t)).ToList();
+        return tools.Where(t => selectedTools.GetValueOrDefault(t.Name, false)).ToList();
     }
 
     private string RenderMarkdown(string markdown)
     {
-        if (string.IsNullOrEmpty(markdown))
-            return string.Empty;
-
-        return Markdig.Markdown.ToHtml(markdown, markdownPipeline);
+        return string.IsNullOrEmpty(markdown) ? string.Empty : Markdig.Markdown.ToHtml(markdown, markdownPipeline);
     }
+
     private async Task DoSearch(MouseEventArgs e)
     {
+        if (isLoading) return;
+
         try
         {
             isLoading = true;
-            errorMessage = "";
-
+            errorMessage = string.Empty;
             searchResponse = new();
-            // Get only the selected tools
-            var selectedToolsList = GetSelectedTools();
 
-            // Validate that at least one tool is selected
-            if (selectedToolsList.Count == 0)
+            var selectedToolsList = GetSelectedTools();
+            if (!selectedToolsList.Any())
             {
                 errorMessage = "Please select at least one tool before performing a search.";
                 return;
             }
 
-            // mcp search with both complete tools and selected tools
             searchResponse = await McpServerService.Search(searchTerm, tools, selectedToolsList);
         }
         catch (Exception ex)
@@ -234,15 +216,9 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
         }
     }
 
-    private void ToggleFunctionInfo()
-    {
-        showFunctionInfo = !showFunctionInfo;
-    }
+    private void ToggleFunctionInfo() => showFunctionInfo = !showFunctionInfo;
 
-    private void ToggleToolsInfo()
-    {
-        showToolsInfo = !showToolsInfo;
-    }
+    private void ToggleToolsInfo() => showToolsInfo = !showToolsInfo;
 
     private void ToggleAllTools(ChangeEventArgs e)
     {
@@ -252,7 +228,5 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
         {
             selectedTools[tool.Name] = areAllToolsSelected;
         }
-
-        StateHasChanged();
     }
 }
