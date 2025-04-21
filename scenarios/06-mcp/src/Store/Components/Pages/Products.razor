@@ -1,7 +1,8 @@
 ﻿@page "/products"
 @using DataEntities
 @using global::Services
-@inject ProductService ProductService
+@* @inject ProductService ProductService *@
+@inject Store.Services.McpServerService McpServerService
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
 
@@ -48,6 +49,22 @@ else
     {
         // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
-        products = await ProductService.GetProducts();
+        //products = await ProductService.GetProducts();
+
+        var tools = McpServerService.GetTools();
+        // select the tool named "KeyWordSearchProducts" from the tools collection, and create an array with that tool
+        var selectedTools = tools.Where(t => t.Name == "KeyWordSearchProducts").ToArray();
+                
+        var response = await McpServerService.Search("*", tools, selectedTools);
+
+        if (response != null)
+        {
+            products = response.Products;
+        }
+        else
+        {
+            // Handle the case where the response is null
+            products = new List<Product>();
+        }
     }
 }
