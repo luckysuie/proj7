@@ -67,7 +67,7 @@ public class McpServerService
                         var deserializedToolResponse = DeserializeResponseJson(searchResponseJson!);
                         if (deserializedToolResponse != null)
                         {
-                            searchResponse.McpFunctionCallId = deserializedToolResponse.ToolCallId;
+                            searchResponse.McpFunctionCallId = functionResult.CallId;
                             searchResponse.McpFunctionCallName ??= deserializedToolResponse.ToolName;
 
                             switch (deserializedToolResponse)
