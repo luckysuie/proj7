@@ -22,6 +22,9 @@ public class WeatherService
     {
         try
         {
+            // the city parameter must contain text like "Seattle, WA" or "Seattle", perform the necessary encoding to be used in the URL
+            city = Uri.EscapeDataString(city);
+
             // call the desired Endpoint
             HttpResponseMessage response = null;
             response = await httpClient.GetAsync($"/api/getweather/{city}");

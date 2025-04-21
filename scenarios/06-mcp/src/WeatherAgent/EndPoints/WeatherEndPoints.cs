@@ -13,12 +13,12 @@ public static class WeatherEndPoints
         routes.MapGet("/", () => $"Weather Agent - {DateTime.Now}").ExcludeFromDescription();
 
         group.MapGet("/getweather/{city}",
-            async (string query,
+            async (string city,
             HttpClient httpClient,
             ILogger <Program> logger,
             IConfiguration config) =>
             {
-                return await GetWeatherAsync(query, httpClient, logger, config);
+                return await GetWeatherAsync(city, httpClient, logger, config);
             })
             .WithName("GetWeather")
             .Produces<OnlineSearchToolResponse>(StatusCodes.Status200OK)
