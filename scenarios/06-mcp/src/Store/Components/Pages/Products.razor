@@ -55,7 +55,7 @@ else
         // select the tool named "KeyWordSearchProducts" from the tools collection, and create an array with that tool
         var selectedTools = tools.Where(t => t.Name == "KeyWordSearchProducts").ToArray();
                 
-        var response = await McpServerService.Search("*", tools, selectedTools);
+        var response = await McpServerService.Search("*", selectedTools);
 
         if (response != null)
         {

@@ -149,7 +149,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
     private string searchTerm = string.Empty;
     private bool isLoading;
     private string errorMessage = string.Empty;
-    private bool showFunctionInfo;
+    private bool showFunctionInfo = true;
     private bool showToolsInfo;
     private IList<ModelContextProtocol.Client.McpClientTool> tools = new List<ModelContextProtocol.Client.McpClientTool>();
     private Dictionary<string, bool> selectedTools = new();
@@ -204,7 +204,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
                 return;
             }
 
-            searchResponse = await McpServerService.Search(searchTerm, tools, selectedToolsList);
+            searchResponse = await McpServerService.Search(searchTerm, selectedToolsList);
         }
         catch (Exception ex)
         {
