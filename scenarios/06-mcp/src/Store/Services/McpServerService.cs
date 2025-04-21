@@ -99,6 +99,10 @@ public class McpServerService
                         {
                             searchResponse.Response = weatherToolResponse.WeatherCondition;
                         }
+                        else if (deserializedToolResponse is ParkInformationToolResponse parkInformationToolResponse)
+                        {
+                            searchResponse.Response = parkInformationToolResponse.ParkInformation;
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -133,6 +137,15 @@ public class McpServerService
                 var weatherResponse = System.Text.Json.JsonSerializer.Deserialize<WeatherToolResponse>(json);
                 logger.LogInformation($"Deserialized JSON as WeatherResponse: City={weatherResponse?.CityName}, Condition={weatherResponse?.WeatherCondition}");
                 return weatherResponse;
+            }
+
+            // Check for ParkInformationResponse properties
+            if (rootElement.TryGetProperty("ParkName", out _) ||
+                rootElement.TryGetProperty("ParkInformation", out _))
+            {
+                var parkResponse = System.Text.Json.JsonSerializer.Deserialize<ParkInformationToolResponse>(json);
+                logger.LogInformation($"Deserialized JSON as ParkInformationResponse: Park={parkResponse?.ParkName}, Information={parkResponse?.ParkInformation}");
+                return parkResponse;
             }
 
             // Check for SearchResponse properties (Products, Response, etc.)
