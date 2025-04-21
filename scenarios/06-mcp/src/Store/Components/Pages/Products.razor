@@ -1,7 +1,6 @@
 ﻿@page "/products"
 @using DataEntities
 @using global::Services
-@* @inject ProductService ProductService *@
 @inject Store.Services.McpServerService McpServerService
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
@@ -47,15 +46,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-        //products = await ProductService.GetProducts();
-
         var tools = McpServerService.GetTools();
         // select the tool named "KeyWordSearchProducts" from the tools collection, and create an array with that tool
         var selectedTools = tools.Where(t => t.Name == "KeyWordSearchProducts").ToArray();
-                
-        var response = await McpServerService.Search("*", selectedTools);
+        // specific prompt to get all products
+        var promptGetAllProducts  = "Perform a keyword search of products with the query criteria: '*'";
+
+        // run the tool with the prompt
+        var response = await McpServerService.GetResponseAsync(promptGetAllProducts, selectedTools);
 
         if (response != null)
         {

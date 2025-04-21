@@ -1,10 +1,8 @@
 ﻿using McpToolsEntities;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
-using OpenAI.Chat;
 using SearchEntities;
 using Services;
-using System.Text;
 using System.Text.Json;
 
 namespace Store.Services;
@@ -14,8 +12,8 @@ public class McpServerService
     private readonly ILogger<ProductService> logger;
     IMcpClient mcpClient = null!;
     IList<McpClientTool> tools = null!;
-    private Microsoft.Extensions.AI.IChatClient? chatClient;
-    private IList<Microsoft.Extensions.AI.ChatMessage> ChatMessages = [];
+    private IChatClient? chatClient;
+    private IList<ChatMessage> ChatMessages = [];
 
     public McpServerService(ILogger<ProductService> _logger, IMcpClient _mcpClient, IChatClient? _chatClient)
     {
@@ -29,16 +27,13 @@ public class McpServerService
 
     public IList<McpClientTool> GetTools() => tools;
 
-    public async Task<SearchResponse?> Search(string searchTerm,
+    public async Task<SearchResponse?> GetResponseAsync(string searchTerm,
         IList<McpClientTool>? selectedTools = null)
     {
         try
         {
-            // init chat messages
-            //var systemMessage = ""; // CreateSystemMessage(tools, selectedTools);
-            //ChatMessages.Add(new ChatMessage(ChatRole.System, systemMessage));
             ChatMessages.Clear();
-            ChatMessages.Add(new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, searchTerm));
+            ChatMessages.Add(new ChatMessage(ChatRole.User, searchTerm));
 
             ChatOptions chatOptions = new ChatOptions
             {

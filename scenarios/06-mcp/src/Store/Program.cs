@@ -13,11 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 // add aspire service defaults
 builder.AddServiceDefaults();
 
-// add services
-builder.Services.AddSingleton<ProductService>();
-builder.Services.AddHttpClient<ProductService>(
-    static client => client.BaseAddress = new("https+http://products"));
-
 // add a named service for a HttpClient object named "productsHttpClient"
 builder.Services.AddHttpClient("productsHttpClient", static client => client.BaseAddress = new("https+http://products"));
 

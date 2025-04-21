@@ -113,10 +113,19 @@ public static class ProductEndpoints
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
+            List<Product> products = new List<Product>();
 
-            List<Product> products = await db.Product
-            .Where(p => EF.Functions.Like(p.Name, $"%{search}%"))
-            .ToListAsync();
+            // if the search criteria is '*' return all products
+            if (search == "*")
+            {
+                products = await db.Product.ToListAsync();
+            }
+            else
+            {
+                products = await db.Product
+                .Where(p => EF.Functions.Like(p.Name, $"%{search}%"))
+                .ToListAsync();
+            }           
 
             stopwatch.Stop();
 

@@ -204,7 +204,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
                 return;
             }
 
-            searchResponse = await McpServerService.Search(searchTerm, selectedToolsList);
+            searchResponse = await McpServerService.GetResponseAsync(searchTerm, selectedToolsList);
         }
         catch (Exception ex)
         {
