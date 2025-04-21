@@ -7,11 +7,11 @@ using System.ComponentModel;
 namespace eShopMcpSseServer.Tools;
 
 [McpServerToolType]
-public static class Products 
+public class Products 
 {
     [McpServerTool(Name = "SemanticSearchProducts"), 
         Description("Performs a search in the outdoor products catalog. Returns a text with the found products and the collection of Products in the Store. Use this function when the user asks for product recommendations or specific items.")]
-    public static async Task<ProductsSearchToolResponse> SemanticSearchProducts(
+    public async Task<ProductsSearchToolResponse> SemanticSearchProducts(
         ProductService productService,
         ILogger<ProductService> logger,
         IMcpServer currentMcpServer,
@@ -43,7 +43,7 @@ public static class Products
 
     [McpServerTool(Name = "KeyWordSearchProducts"),
     Description("Searches products in the database by matching the query string with product names only. Use this function when the user is looking for products by specific names or keywords that may appear in product names. Do not use this for semantic searches or when the user asks for product recommendations based on concepts or categories. Returns matching products and their details.")]
-    public static async Task<ProductsSearchToolResponse> KeyWordSearchProducts(
+    public async Task<ProductsSearchToolResponse> KeyWordSearchProducts(
     ProductService productService,
     ILogger<ProductService> logger,
     IMcpServer currentMcpServer,

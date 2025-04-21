@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace McpSample.AspNetCoreSseServer;
 
 [McpServerToolType]
-public static class ParkInformation
+public class ParkInformation
 {
     /// <summary>
     /// Sample prompts that trigger this function:
@@ -18,7 +18,7 @@ public static class ParkInformation
     /// </summary>
     [McpServerTool(Name = "GetParkInformation"), 
         Description("Retrieves comprehensive information about a specified park. Use this function when the user is asking questions about parks, their locations, opening hours, facilities, or how to get there. Returns detailed park information including name, description, location, opening hours, transportation options, and available facilities.")]
-    public static async Task<ParkInformationToolResponse> GetParkInformation(
+    public async Task<ParkInformationToolResponse> GetParkInformation(
         ParkInformationService parkInformationService,
         ILogger<ProductService> logger,
         IMcpServer currentMcpServer,

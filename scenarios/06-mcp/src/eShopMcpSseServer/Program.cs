@@ -1,3 +1,5 @@
+using eShopMcpSseServer.Tools;
+using McpSample.AspNetCoreSseServer;
 using OpenAI;
 using OpenAI.Chat;
 using Services;
@@ -16,6 +18,14 @@ builder.Services.AddHttpClient<ProductService>(
 builder.Services.AddSingleton<OnlineResearcherService>();
 builder.Services.AddHttpClient<OnlineResearcherService>(
     static client => client.BaseAddress = new("https+http://onlineresearcher"));
+
+builder.Services.AddSingleton<WeatherService>();
+builder.Services.AddHttpClient<WeatherService>(
+    static client => client.BaseAddress = new("https+http://weatheragent"));
+
+builder.Services.AddSingleton<ParkInformationService>();
+builder.Services.AddHttpClient<ParkInformationService>(
+    static client => client.BaseAddress = new("https+http://parkinformationagent"));
 
 var azureOpenAiClientName = "openai";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
@@ -40,7 +50,12 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 });
 
 // add MCP server
-builder.Services.AddMcpServer().WithToolsFromAssembly();
+builder.Services.AddMcpServer()
+    .WithHttpTransport()
+    .WithTools<OnlineResearch>()
+    .WithTools<ParkInformation>()
+    .WithTools<Products>()
+    .WithTools<WeatherTool>();
 
 var app = builder.Build();
 
@@ -50,6 +65,6 @@ app.UseHttpsRedirection();
 
 // map endpoints
 app.MapGet("/", () => $"eShopLite-MCP Server! {DateTime.Now}");
-app.MapMcpSse();
+app.MapMcp();
 
 app.Run();

@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace McpSample.AspNetCoreSseServer;
 
 [McpServerToolType]
-public static class WeatherTool
+public class WeatherTool
 {
     /// <summary>
     /// Sample prompts that trigger this function:
@@ -16,7 +16,7 @@ public static class WeatherTool
     /// </summary>
     [McpServerTool(Name = "GetWeatherForCity"), 
         Description("Retrieves the current weather conditions for a specified city. Use this function when the user asks about weather in a specific location. Returns both the city name and a textual description of current weather conditions.")]
-    public static async Task<WeatherToolResponse> GetWeatherForCity(
+    public async Task<WeatherToolResponse> GetWeatherForCity(
         WeatherService weatherService,
         ILogger<ProductService> logger,
         IMcpServer currentMcpServer,
