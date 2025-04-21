@@ -3,7 +3,6 @@
 @using SearchEntities
 @using global::Services
 
-@inject ProductService ProductService
 @inject Store.Services.McpServerService McpServerService
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
@@ -45,8 +44,8 @@
                                 <tr>
                                     <td>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" 
-                                                   @onchange="e => ToggleToolSelection(tool, (bool)e.Value)" 
+                                            <input class="form-check-input" type="checkbox"
+                                                   @onchange="e => ToggleToolSelection(tool, (bool)e.Value)"
                                                    checked="@IsToolSelected(tool)" />
                                         </div>
                                     </td>
@@ -104,7 +103,7 @@ else if (!string.IsNullOrEmpty(searchResponse.Response))
         @((MarkupString)RenderMarkdown(searchResponse.Response))
     </div>
 }
-else if (!string.IsNullOrEmpty(errorMessage))
+@if (!string.IsNullOrEmpty(errorMessage))
 {
     <div class="alert alert-danger" role="alert">
         @errorMessage
@@ -128,7 +127,7 @@ else if (!string.IsNullOrEmpty(errorMessage))
                 {
                     <tr>
                         <!-- Simulating images being hosted on a CDN -->
-                        <td><img height="80" width="80" src="https://raw.githubusercontent.com/MicrosoftDocs/mslearn-dotnet-cloudnative/main/dotnet-docker/Products/wwwroot/images/@product.ImageUrl" /></td>
+                        <td><img height="80" width="80" src="@product.ImageUrl" /></td>
                         <td>@product.Name</td>
                         <td>@product.Description</td>
                         <td>@product.Price</td>
@@ -149,29 +148,29 @@ else if (!string.IsNullOrEmpty(errorMessage))
     private IList<ModelContextProtocol.Client.McpClientTool> tools;
     private Dictionary<string, bool> selectedTools = new();
     private MarkdownPipeline markdownPipeline;
-    
+
     // Computed property to determine if MCP search should be used based on selected tools
-    private bool mcpSearch => selectedTools.Any(t => t.Value);    protected override void OnInitialized()
+    private bool mcpSearch => selectedTools.Any(t => t.Value); protected override void OnInitialized()
     {
         tools = McpServerService.GetTools();
 
         markdownPipeline = new MarkdownPipelineBuilder()
         .UseAdvancedExtensions()
         .Build();
-        
+
         // Initialize the selectedTools dictionary with all tools unselected
         foreach (var tool in tools)
         {
             selectedTools[tool.Name] = false;
         }
     }
-    
+
     private void ToggleToolSelection(ModelContextProtocol.Client.McpClientTool tool, bool isSelected)
     {
         selectedTools[tool.Name] = isSelected;
         StateHasChanged();
     }
-    
+
     private bool IsToolSelected(ModelContextProtocol.Client.McpClientTool tool)
     {
         if (selectedTools.TryGetValue(tool.Name, out bool value))
@@ -180,12 +179,12 @@ else if (!string.IsNullOrEmpty(errorMessage))
         }
         return false;
     }
-    
+
     private IList<ModelContextProtocol.Client.McpClientTool> GetSelectedTools()
     {
         if (!mcpSearch)
             return new List<ModelContextProtocol.Client.McpClientTool>();
-            
+
         return tools.Where(t => IsToolSelected(t)).ToList();
     }
 
@@ -195,7 +194,8 @@ else if (!string.IsNullOrEmpty(errorMessage))
             return string.Empty;
 
         return Markdig.Markdown.ToHtml(markdown, markdownPipeline);
-    }    private async Task DoSearch(MouseEventArgs e)
+    }
+    private async Task DoSearch(MouseEventArgs e)
     {
         try
         {
@@ -203,20 +203,18 @@ else if (!string.IsNullOrEmpty(errorMessage))
             errorMessage = "";
 
             searchResponse = new();
-            if (mcpSearch)
+            // Get only the selected tools
+            var selectedToolsList = GetSelectedTools();
+            
+            // Validate that at least one tool is selected
+            if (selectedToolsList.Count == 0)
             {
-                // Get only the selected tools
-                var selectedToolsList = GetSelectedTools();
-                
-                // mcp search with both complete tools and selected tools
-                searchResponse = await McpServerService.Search(searchTerm, tools, selectedToolsList);
-            }
-            else
-            {
-                // keyword search
-                searchResponse = await ProductService.Search(searchTerm);
+                errorMessage = "Please select at least one tool before performing a search.";
+                return;
             }
 
+            // mcp search with both complete tools and selected tools
+            searchResponse = await McpServerService.Search(searchTerm, tools, selectedToolsList);
         }
         catch (Exception ex)
         {

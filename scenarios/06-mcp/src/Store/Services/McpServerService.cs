@@ -37,14 +37,13 @@ public class McpServerService
         try
         {
             // init chat messages
-            var systemMessage = CreateSystemMessage(tools, selectedTools);
+            var systemMessage = ""; // CreateSystemMessage(tools, selectedTools);
             ChatMessages = [];
             ChatMessages.Add(new ChatMessage(ChatRole.System, systemMessage));
 
             ChatOptions chatOptions = new ChatOptions
             {
-                Tools = tools.ToArray(),
-                ToolMode = ChatToolMode.Auto
+                Tools = [.. selectedTools]
             };
 
             // call the desired Endpoint
@@ -170,7 +169,7 @@ public class McpServerService
             {
                 bool isSelected = selectedTools != null && selectedTools.Any(t => t.Name == tool.Name);
                 
-                message.AppendLine($"- {tool.Name}: {tool.Description}");
+                message.AppendLine($"- {tool.Name}");
                 message.AppendLine($"  Status: {(isSelected ? "ALLOWED" : "NOT ALLOWED")}");
                 if (!isSelected)
                 {
