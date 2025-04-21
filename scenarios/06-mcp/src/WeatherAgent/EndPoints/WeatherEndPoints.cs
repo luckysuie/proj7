@@ -12,7 +12,7 @@ public static class WeatherEndPoints
 
         routes.MapGet("/", () => $"Weather Agent - {DateTime.Now}").ExcludeFromDescription();
 
-        routes.MapGet("/getweather/{city}",
+        group.MapGet("/getweather/{city}",
             async (string query,
             HttpClient httpClient,
             ILogger <Program> logger,

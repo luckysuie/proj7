@@ -12,7 +12,7 @@ public static class ParkInformationAgentEndPoints
 
         routes.MapGet("/", () => $"Park Information Agent - {DateTime.Now}").ExcludeFromDescription();
 
-        routes.MapGet("/getparkinfo/{parkName}",
+        group.MapGet("/getparkinfo/{parkName}",
             async (string parkName,
             ILogger <Program> logger,
             IConfiguration config) =>
