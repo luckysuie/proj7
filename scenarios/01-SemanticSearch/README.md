@@ -45,26 +45,7 @@ The Azure Resource Group with all the deployed services:
 
 ## Architecture diagram
 
-```mermaid
-flowchart TD
-    subgraph Azure_Container_Apps_Environment["Azure Container Apps Environment"]
-        Store["Store (Blazor WebApp)"]
-        eshopmcpserver["eshopmcpserver (MCP Server)"]
-    end
-
-    ContainerRegistry["Container Registry"]
-    ManagedIdentity["Managed Identity"]
-    StorageAccount["Storage Account"]
-    AzureOpenAI["Azure OpenAI"]
-
-    ContainerRegistry --> ManagedIdentity
-    ManagedIdentity --> AzureOpenAI
-    ManagedIdentity --> Azure_Container_Apps_Environment
-
-    StorageAccount --> Azure_Container_Apps_Environment
-
-    Store --> eshopmcpserver
-```
+![Architecture diagram](./images/30Diagram.png)
 
 ## Getting Started
 
