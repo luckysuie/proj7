@@ -42,43 +42,58 @@ The MCP implementation enables large language models to extend their capabilitie
 ## Architecture diagram
 
 ```mermaid
-architecture-beta
-    direction TB
+---
+title: eShopLite - Model Context Protocol (MCP)
+---
+graph architecture
+
+    %% External Services with proper architecture node types
+    ContainerRegistry["Container Registry"]:::externalSystem
+    ManagedIdentity["Managed Identity"]:::externalSystem
+    StorageAccount["Storage Account"]:::externalSystem
+    AzureOpenAI["Azure OpenAI"]:::externalSystem
+    AppInsights["Application Insights"]:::externalSystem
     
-    ContainerRegistry{{Container Registry}}
-    ManagedIdentity{{Managed Identity}}
-    StorageAccount{{Storage Account}}
-    AzureOpenAI{{Azure OpenAI}}
-    appInsights{{Application Insights}}
-    
-    
-    subgraph Azure_Container_Apps_Environment ["Azure Container Apps Environment"]
-        store[Store\nBlazor WebApp]
-        eshopmcpserver[eShopMcpSseServer\nMCP Server]
-        products[Products\nService]
-        sql[(SQL Server\nDatabase)]
-        onlineresearcher[OnlineResearcher]
-        parkinformationagent[ParkInformation\nAgent]
-        weatheragent[Weather\nAgent]
+    %% Container Apps Environment
+    subgraph Azure_Container_Apps_Environment["Azure Container Apps Environment"]
+        direction TB
+        
+        %% Container Apps with proper node types
+        Store["Store\nBlazor WebApp"]:::service
+        EShopMcpServer["eShopMcpSseServer\nMCP Server"]:::service
+        Products["Products\nService"]:::service
+        Sql["SQL Server\nDatabase"]:::database
+        
+        %% Agent services with proper node types
+        OnlineResearcher["OnlineResearcher"]:::service
+        ParkInformationAgent["ParkInformation\nAgent"]:::service
+        WeatherAgent["Weather\nAgent"]:::service
     end
     
+    %% Define relationships between external systems and container environment
+    ContainerRegistry -- "Push/Pull images" --> ManagedIdentity
+    ManagedIdentity -- "Authentication" --> Azure_Container_Apps_Environment
+    ManagedIdentity -- "Authentication" --> AzureOpenAI
+    StorageAccount -- "Storage" --> Azure_Container_Apps_Environment
+    Azure_Container_Apps_Environment -- "Telemetry" <--> AppInsights
     
-    ContainerRegistry --> ManagedIdentity: Push/Pull images
-    ManagedIdentity -- Authentication --> Azure_Container_Apps_Environment
-    ManagedIdentity -- Authentication --> AzureOpenAI
-    StorageAccount -- Storage --> Azure_Container_Apps_Environment
+    %% Internal relationships within container environment
+    Store -- "Reference" --> EShopMcpServer
+    EShopMcpServer -- "Reference" --> Products
+    Products -- "Reference" --> Sql
+    EShopMcpServer -- "Reference" --> OnlineResearcher
+    EShopMcpServer -- "Reference" --> ParkInformationAgent
+    EShopMcpServer -- "Reference" --> WeatherAgent
     
+    %% AI connections
+    EShopMcpServer -- "AI Features" --> AzureOpenAI
+    Products -- "AI Features" --> AzureOpenAI
+    Store -- "AI Features" --> AzureOpenAI
     
-    store --> eshopmcpserver: Reference
-    eshopmcpserver --> products: Reference
-    eshopmcpserver --> onlineresearcher: Reference
-    eshopmcpserver --> parkinformationagent: Reference
-    eshopmcpserver --> weatheragent: Reference
-    products --> sql: Reference
-    Azure_Container_Apps_Environment <--> appInsights: Telemetry
-    eshopmcpserver --> AzureOpenAI: AI Features
-    products --> AzureOpenAI: AI Features
-    store --> AzureOpenAI: AI Features
+    %% Define styles
+    classDef service fill:#9370DB,stroke:#333,stroke-width:2px,color:white
+    classDef database fill:#3498DB,stroke:#333,stroke-width:2px,color:white
+    classDef externalSystem fill:#48C9B0,stroke:#333,stroke-width:2px,color:white
 ```
 
 ## Getting Started
