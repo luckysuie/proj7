@@ -42,9 +42,6 @@ The MCP implementation enables large language models to extend their capabilitie
 ## Architecture diagram
 
 ```mermaid
----
-title: eShopLite - Model Context Protocol (MCP)
----
 architecture-beta
 
 direction TB
