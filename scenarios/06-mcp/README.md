@@ -45,7 +45,7 @@ The MCP implementation enables large language models to extend their capabilitie
 ---
 title: eShopLite - Model Context Protocol (MCP)
 ---
-graph architecture
+architecture-beta
 
     %% External Services with proper architecture node types
     ContainerRegistry["Container Registry"]:::externalSystem
