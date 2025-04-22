@@ -47,53 +47,31 @@ title: eShopLite - Model Context Protocol (MCP)
 ---
 architecture-beta
 
-    %% External Services with proper architecture node types
-    ContainerRegistry["Container Registry"]:::externalSystem
-    ManagedIdentity["Managed Identity"]:::externalSystem
-    StorageAccount["Storage Account"]:::externalSystem
-    AzureOpenAI["Azure OpenAI"]:::externalSystem
-    AppInsights["Application Insights"]:::externalSystem
-    
-    %% Container Apps Environment
-    subgraph Azure_Container_Apps_Environment["Azure Container Apps Environment"]
-        direction TB
-        
-        %% Container Apps with proper node types
-        Store["Store\nBlazor WebApp"]:::service
-        EShopMcpServer["eShopMcpSseServer\nMCP Server"]:::service
-        Products["Products\nService"]:::service
-        Sql["SQL Server\nDatabase"]:::database
-        
-        %% Agent services with proper node types
-        OnlineResearcher["OnlineResearcher"]:::service
-        ParkInformationAgent["ParkInformation\nAgent"]:::service
-        WeatherAgent["Weather\nAgent"]:::service
-    end
-    
-    %% Define relationships between external systems and container environment
-    ContainerRegistry -- "Push/Pull images" --> ManagedIdentity
-    ManagedIdentity -- "Authentication" --> Azure_Container_Apps_Environment
-    ManagedIdentity -- "Authentication" --> AzureOpenAI
-    StorageAccount -- "Storage" --> Azure_Container_Apps_Environment
-    Azure_Container_Apps_Environment -- "Telemetry" <--> AppInsights
-    
-    %% Internal relationships within container environment
-    Store -- "Reference" --> EShopMcpServer
-    EShopMcpServer -- "Reference" --> Products
-    Products -- "Reference" --> Sql
-    EShopMcpServer -- "Reference" --> OnlineResearcher
-    EShopMcpServer -- "Reference" --> ParkInformationAgent
-    EShopMcpServer -- "Reference" --> WeatherAgent
-    
-    %% AI connections
-    EShopMcpServer -- "AI Features" --> AzureOpenAI
-    Products -- "AI Features" --> AzureOpenAI
-    Store -- "AI Features" --> AzureOpenAI
-    
-    %% Define styles
-    classDef service fill:#9370DB,stroke:#333,stroke-width:2px,color:white
-    classDef database fill:#3498DB,stroke:#333,stroke-width:2px,color:white
-    classDef externalSystem fill:#48C9B0,stroke:#333,stroke-width:2px,color:white
+    group diagram(cloud)[Azure Deployment]
+
+    group acapps(cloud)[Azure Container Apps Environment]
+
+    service Store(cloud)[Store Blazor WebApp] in acapps
+    service EShopMcpServer(server)[eShopMcpSseServer MCP Server] in acapps
+    service Products(server)[Products Service] in acapps
+    service OnlineResearcher(server)[OnlineResearcher] in acapps
+    service ParkInfoAgent(server)[ParkInformation Agent] in acapps
+    service WeatherAgent(server)[Weather Agent] in acapps
+    service Sql(database)[SQL Server Database] in acapps    
+
+    service ContainerRegistry(cloud)[Container Registry] in diagram
+    service ManagedIdentity(server)[Managed Identity] in diagram
+    service StorageAccount(disk)[Storage Account] in diagram
+    service AzureOpenAI(cloud)[Azure OpenAI] in diagram
+    service AppInsights(internet)[Application Insights] in diagram
+    service AzureOpenAIFoundry(cloud)[Azure AI Foundry Project] in diagram
+
+    Store:R <--> L:EShopMcpServer
+    EShopMcpServer:R -- R:Products
+    EShopMcpServer:R -- R:OnlineResearcher
+    EShopMcpServer:R -- R:ParkInfoAgent
+    EShopMcpServer:R -- R:WeatherAgent
+    Products:R -- R:Sql
 ```
 
 ## Getting Started
