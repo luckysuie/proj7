@@ -42,24 +42,48 @@ The MCP implementation enables large language models to extend their capabilitie
 ## Architecture diagram
 
 ```mermaid
-flowchart TD
-    subgraph Azure_Container_Apps_Environment["Azure Container Apps Environment"]
-        Store["Store (Blazor WebApp)"]
-        eshopmcpserver["eshopmcpserver (MCP Server)"]
-    end
+---
+title: eShopLite - Model Context Protocol (MCP)
+---
+architecture-beta
 
-    ContainerRegistry["Container Registry"]
-    ManagedIdentity["Managed Identity"]
-    StorageAccount["Storage Account"]
-    AzureOpenAI["Azure OpenAI"]
+direction TB
 
-    ContainerRegistry --> ManagedIdentity
-    ManagedIdentity --> AzureOpenAI
-    ManagedIdentity --> Azure_Container_Apps_Environment
+%% External Services
+ContainerRegistry{{Container Registry}}
+ManagedIdentity{{Managed Identity}}
+StorageAccount{{Storage Account}}
+AzureOpenAI{{Azure OpenAI}}
+appInsights{{Application Insights}}
 
-    StorageAccount --> Azure_Container_Apps_Environment
+%% Container Apps Environment
+subgraph Azure_Container_Apps_Environment ["Azure Container Apps Environment"]
+    store[Store\nBlazor WebApp]
+    eshopmcpserver[eShopMcpSseServer\nMCP Server]
+    products[Products\nService]
+    sql[(SQL Server\nDatabase)]
+    onlineresearcher[OnlineResearcher]
+    parkinformationagent[ParkInformation\nAgent]
+    weatheragent[Weather\nAgent]
+end
 
-    Store --> eshopmcpserver
+%% Define relationships
+ContainerRegistry --> ManagedIdentity: Push/Pull images
+ManagedIdentity -- Authentication --> Azure_Container_Apps_Environment
+ManagedIdentity -- Authentication --> AzureOpenAI
+StorageAccount -- Storage --> Azure_Container_Apps_Environment
+
+%% Internal relationships
+store --> eshopmcpserver: Reference
+eshopmcpserver --> products: Reference
+eshopmcpserver --> onlineresearcher: Reference
+eshopmcpserver --> parkinformationagent: Reference
+eshopmcpserver --> weatheragent: Reference
+products --> sql: Reference
+Azure_Container_Apps_Environment <--> appInsights: Telemetry
+eshopmcpserver --> AzureOpenAI: AI Features
+products --> AzureOpenAI: AI Features
+store --> AzureOpenAI: AI Features
 ```
 
 ## Getting Started
