@@ -12,7 +12,9 @@
 
 # eShopLite
 
-**eShopLite** is a set of reference .NET applications implementing an eCommerce site with features like Semantic Search, MCP, Reasoning models and more.
+**eShopLite** is a set of reference .NET applications implementing an eCommerce site with features like Semantic Search, Model Context Protocol (MCP), Reasoning models, vector databases, and more.
+
+> **All scenarios in this repository use the latest version of .NET and leverage .NET Aspire to orchestrate the entire solution.**
 
 Don't forget to [star (🌟) this repo](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars) to find it easier later.
 
