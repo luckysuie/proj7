@@ -3,6 +3,18 @@
 [![Twitter: elbruno](https://img.shields.io/twitter/follow/elbruno.svg?style=social)](https://twitter.com/elbruno)
 ![GitHub: elbruno](https://img.shields.io/github/followers/elbruno?style=social)
 
+[![GitHub license](https://img.shields.io/github/license/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/blob/main/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/graphs/contributors/)
+[![GitHub issues](https://img.shields.io/github/issues/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/issues/)
+[![GitHub pull-requests](https://img.shields.io/github/issues-pr/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/pulls/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+
+[![GitHub watchers](https://img.shields.io/github/watchers/azure-samples/eshoplite.svg?style=social&label=Watch)](https://github.com/azure-samples/eshoplite/watchers/)
+[![GitHub forks](https://img.shields.io/github/forks/azure-samples/eshoplite.svg?style=social&label=Fork)](https://github.com/azure-samples/eshoplite/network/)
+[![GitHub stars](https://img.shields.io/github/stars/azure-samples/eshoplite.svg?style=social&label=Star)](https://github.com/azure-samples/eshoplite/stargazers/)
+
+[![Azure AI Community Discord](https://dcbadge.vercel.app/api/server/ByRwuEEgH4)](https://discord.com/invite/ByRwuEEgH4)
+
 # eShopLite
 
 **eShopLite** is a set of reference .NET applications implementing an eCommerce site with features like Semantic Search, MCP, Reasoning models and more.
