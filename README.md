@@ -14,13 +14,13 @@
 
 **eShopLite** is a set of reference .NET applications implementing an eCommerce site with features like Semantic Search, Model Context Protocol (MCP), Reasoning models, vector databases, and more.
 
-> **All scenarios in this repository use the latest version of .NET and leverage .NET Aspire to orchestrate the entire solution.**
+> ☁️ **All scenarios in this repository use the latest version of .NET and leverage .NET Aspire to orchestrate the entire solution.**
 
-🌟 Don't forget to [star (🌟) this repo](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars) to find it easier later.
+> 🌟 Don't forget to [star (🌟) this repo](https://docs.github.com/en/get-started/exploring-projects-on-github/saving-repositories-with-stars) to find it easier later.
 
-➡️ Get your own copy by [Forking this repo](https://github.com/azure-samples/eshoplite/fork) and find it next in your own repositories.
+> ➡️ Get your own copy by [Forking this repo](https://github.com/azure-samples/eshoplite/fork) and find it next in your own repositories.
 
-❓ **Have a question?** Besides creating [issues](https://github.com/azure-samples/eshoplite/issues) or [pull requests](https://github.com/azure-samples/eshoplite/pulls), the best option for questions is to join the [Azure AI Discord channel](https://discord.com/invite/ByRwuEEgH4), where a team of AI experts can help you.
+> ❓ **Have a question?** Besides creating [issues](https://github.com/azure-samples/eshoplite/issues) or [pull requests](https://github.com/azure-samples/eshoplite/pulls), the best option for questions is to join the [Azure AI Discord channel](https://discord.com/invite/ByRwuEEgH4), where a team of AI experts can help you.
 
 ## Features
 
