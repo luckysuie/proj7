@@ -19,7 +19,7 @@ var store = builder.AddProject<Projects.Store>("store")
 if (builder.ExecutionContext.IsPublishMode)
 {
     var appInsights = builder.AddAzureApplicationInsights("appInsights");
-    var chatDeploymentName = "gpt-4.1-mini";
+    var chatDeploymentName = "gpt-41-mini";
     var embeddingsDeploymentName = "text-embedding-ada-002";
     var aoai = builder.AddAzureOpenAI("openai");   
     aoai.AddDeployment(name: chatDeploymentName,

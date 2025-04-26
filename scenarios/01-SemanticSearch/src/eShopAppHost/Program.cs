@@ -17,7 +17,7 @@ if (builder.ExecutionContext.IsPublishMode)
 {
     // production code uses Azure services, so we need to add them here
     var appInsights = builder.AddAzureApplicationInsights("appInsights");
-    var chatDeploymentName = "gpt-4.1-mini";
+    var chatDeploymentName = "gpt-41-mini";
     var embeddingsDeploymentName = "text-embedding-ada-002";
     var aoai = builder.AddAzureOpenAI("openai");
     aoai.AddDeployment(name: chatDeploymentName,
