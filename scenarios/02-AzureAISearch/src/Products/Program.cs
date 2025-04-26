@@ -18,18 +18,17 @@ builder.Services.AddProblemDetails();
 // Add DbContext service
 builder.AddSqlServerDbContext<Context>("sqldb");
 
-// To reuse existing Azure AI Search resources, this to "azureaisearchdev", and check the documentation on how to reuse the resources
+// To reuse existing Azure AI Search and Azure OpenAI resources, check the documentation on how to reuse the resources
 var azureAiSearchName = "azureaisearch";
 builder.AddAzureSearchClient(azureAiSearchName);
 
-// To reuse existing Azure OpenAI resources, this to "openaidev", and check the documentation on how to reuse the resources
 var azureOpenAiClientName = "openai";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
+    var chatDeploymentName = "gpt-4.1-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     ChatClient chatClient = null;
@@ -40,7 +39,7 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
     }
     catch (Exception exc)
     {
-        logger.LogError(exc, "Error creating embeddings client");
+        logger.LogError(exc, "Error creating chat client");
     }
     return chatClient;
 });
@@ -109,6 +108,17 @@ using (var scope = app.Services.CreateScope())
         app.Logger.LogError(exc, "Error creating database");
     }
     DbInitializer.Initialize(context);
+
+    // init memeory context
+    var memoryContext = scope.ServiceProvider.GetRequiredService<MemoryContext>();
+    try
+    {
+        memoryContext.InitMemoryContextAsync(context).Wait();
+    }
+    catch (Exception exc)
+    {
+        app.Logger.LogError(exc, "Error initializing memory context");
+    }
 }
 
 app.Run();

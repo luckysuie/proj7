@@ -37,7 +37,7 @@ public class MemoryContext
 
     public async Task<bool> InitMemoryContextAsync(Context db)
     {
-        _logger.LogInformation("Initializing memory context with Redis Vector Store");
+        _logger.LogInformation("Initializing memory context with Azure AI Search");
 
         var vectorProductStore = new AzureAISearchVectorStore(_azureSearchIndexClient);
         _productsCollection = vectorProductStore.GetCollection<string, ProductVectorAzureAISearch>("products");
@@ -103,7 +103,7 @@ public class MemoryContext
 
             var searchOptions = new VectorSearchOptions<ProductVectorAzureAISearch>()
             {
-                Top = 1
+                Top = 3
             };
 
             // search the vector database for the most similar product        
