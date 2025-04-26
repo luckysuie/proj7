@@ -28,8 +28,8 @@ resource gpt_41_mini 'Microsoft.CognitiveServices/accounts/deployments@2024-10-0
     }
   }
   sku: {
-    name: 'Standard'
-    capacity: 8
+    name: 'GlobalStandard'
+    capacity: 10
   }
   parent: openai
 }
