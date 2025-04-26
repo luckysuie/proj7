@@ -19,6 +19,7 @@ builder.Services.AddHttpClient("productsHttpClient", static client => client.Bas
 builder.Services.AddSingleton<McpServerService>();
 
 // add openai client
+var chatDeploymentName = "gpt-4.1-mini";
 var azureOpenAiClientName = "openai";
 builder.AddOpenAIClient(azureOpenAiClientName);
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
@@ -26,7 +27,6 @@ builder.AddAzureOpenAIClient(azureOpenAiClientName);
 // get azure openai client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<IChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     IChatClient chatClient = null;
@@ -52,7 +52,6 @@ builder.Services.AddSingleton<IChatClient>(serviceProvider =>
 // get OpenAI client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     ChatClient chatClient = null;

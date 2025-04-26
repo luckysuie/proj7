@@ -19,12 +19,13 @@ builder.AddSqlServerDbContext<Context>("sqldb");
 
 // in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
+var chatDeploymentName = "gpt-4.1-mini";
+var embeddingsDeploymentName = "text-embedding-ada-002";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     ChatClient chatClient = null;
@@ -35,7 +36,7 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
     }
     catch (Exception exc)
     {
-        logger.LogError(exc, "Error creating embeddings client");
+        logger.LogError(exc, "Error creating chat client");
     }
     return chatClient;
 });
@@ -43,7 +44,6 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 // get azure openai client and create embedding client from aspire hosting configuration
 builder.Services.AddSingleton<EmbeddingClient>(serviceProvider =>
 {
-    var embeddingsDeploymentName = "text-embedding-ada-002";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Embeddings client configuration, modelId: {embeddingsDeploymentName}");
     EmbeddingClient embeddingsClient = null;
