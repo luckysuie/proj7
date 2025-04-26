@@ -28,7 +28,7 @@ properties:
       - name: connectionstrings--openai
         value: '{{ .Env.OPENAI_CONNECTIONSTRING }}'
       - name: connectionstrings--sqldb
-        value: Server=sql,1433;User ID=sa;Password={{ securedParameter "sql_password" }};TrustServerCertificate=true;Database=sqldb
+        value: Server=sql,1433;User ID=sa;Password={{ securedParameter "sql_password" }};TrustServerCertificate=true;Initial Catalog=sqldb
   template:
     containers:
       - image: {{ .Image }}
@@ -37,7 +37,7 @@ properties:
           - name: AZURE_CLIENT_ID
             value: {{ .Env.MANAGED_IDENTITY_CLIENT_ID }}
           - name: AI_ChatDeploymentName
-            value: gpt-4o-mini
+            value: gpt-41-mini
           - name: AI_embeddingsDeploymentName
             value: text-embedding-ada-002
           - name: ASPNETCORE_FORWARDEDHEADERS_ENABLED
