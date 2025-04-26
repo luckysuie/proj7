@@ -23,9 +23,6 @@
     </div>
     <hr />
     <p class="quote">@aiResponse</p>
-
-    @* Uncomment this to show elapsed time *@
-    @* <p class="smallquote">Elapsed Time: [@elapsedTime]</p> *@
 </div>
 
 
@@ -63,7 +60,6 @@ else
     private string searchTerm = "";
     private List<DataEntities.Product>? products;
     private string aiResponse = "";
-    private string elapsedTime = "";
     private bool smartSearch = false;
 
     private async Task DoSearch(MouseEventArgs e)
@@ -72,6 +68,5 @@ else
         var response = await ProductService.Search(searchTerm, smartSearch);
         aiResponse = response.Response;
         products = response.Products;
-        elapsedTime = response.ElapsedTime.ToString();
     }
 }
