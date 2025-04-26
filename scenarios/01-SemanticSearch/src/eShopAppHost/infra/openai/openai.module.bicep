@@ -1,10 +1,6 @@
 @description('The location for the resource(s) to be deployed.')
 param location string = resourceGroup().location
 
-param principalId string
-
-param principalType string
-
 resource openai 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   name: take('openai-${uniqueString(resourceGroup().id)}', 64)
   location: location
@@ -22,28 +18,18 @@ resource openai 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
-resource openai_CognitiveServicesOpenAIContributor 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(openai.id, principalId, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a001fd3d-188f-4b5d-821b-7da978bf7442'))
-  properties: {
-    principalId: principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'a001fd3d-188f-4b5d-821b-7da978bf7442')
-    principalType: principalType
-  }
-  scope: openai
-}
-
-resource gpt_4o_mini 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
-  name: 'gpt-4o-mini'
+resource gpt_41_mini 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = {
+  name: 'gpt-41-mini'
   properties: {
     model: {
       format: 'OpenAI'
-      name: 'gpt-4o-mini'
-      version: '2024-07-18'
+      name: 'gpt-4.1-mini'
+      version: '2025-04-14'
     }
   }
   sku: {
-    name: 'GlobalStandard'
-    capacity: 10
+    name: 'Standard'
+    capacity: 8
   }
   parent: openai
 }
@@ -63,8 +49,10 @@ resource text_embedding_ada_002 'Microsoft.CognitiveServices/accounts/deployment
   }
   parent: openai
   dependsOn: [
-    gpt_4o_mini
+    gpt_41_mini
   ]
 }
 
 output connectionString string = 'Endpoint=${openai.properties.endpoint}'
+
+output name string = openai.name
