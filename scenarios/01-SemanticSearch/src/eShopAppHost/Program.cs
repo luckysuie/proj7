@@ -17,17 +17,15 @@ if (builder.ExecutionContext.IsPublishMode)
 {
     // production code uses Azure services, so we need to add them here
     var appInsights = builder.AddAzureApplicationInsights("appInsights");
-    var chatDeploymentName = "gpt-4o-mini";
+    var chatDeploymentName = "gpt-4.1-mini";
     var embeddingsDeploymentName = "text-embedding-ada-002";
-    var aoai = builder.AddAzureOpenAI("openai")
-        .AddDeployment(new AzureOpenAIDeployment(chatDeploymentName,
-        "gpt-4o-mini",
-        "2024-07-18",
-        "GlobalStandard",
-        10))
-        .AddDeployment(new AzureOpenAIDeployment(embeddingsDeploymentName,
-        "text-embedding-ada-002",
-        "2"));
+    var aoai = builder.AddAzureOpenAI("openai");
+    aoai.AddDeployment(name: chatDeploymentName,
+            modelName: "gpt-4.1-mini",
+            modelVersion: "2025-04-14");
+    aoai.AddDeployment(name: embeddingsDeploymentName,
+        modelName: "text-embedding-ada-002",
+        modelVersion: "2");
 
     products.WithReference(appInsights)
         .WithReference(aoai)

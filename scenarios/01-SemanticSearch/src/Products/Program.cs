@@ -21,14 +21,14 @@ builder.Services.AddProblemDetails();
 // Add DbContext service
 builder.AddSqlServerDbContext<Context>("sqldb");
 
-// in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
+// in dev scenarios check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
+    var chatDeploymentName = "gpt-4.1-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     ChatClient chatClient = null;
@@ -39,7 +39,7 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
     }
     catch (Exception exc)
     {
-        logger.LogError(exc, "Error creating embeddings client");
+        logger.LogError(exc, "Error creating chat client");
     }
     return chatClient;
 });
@@ -107,6 +107,17 @@ using (var scope = app.Services.CreateScope())
         app.Logger.LogError(exc, "Error creating database");
     }
     DbInitializer.Initialize(context);
+
+    // init the memory context
+    var memoryContext = scope.ServiceProvider.GetRequiredService<MemoryContext>();
+    try
+    {
+        memoryContext.InitMemoryContextAsync(context).Wait();
+    }
+    catch (Exception exc)
+    {
+        app.Logger.LogError(exc, "Error initializing memory context");
+    }
 }
 
 app.Run();

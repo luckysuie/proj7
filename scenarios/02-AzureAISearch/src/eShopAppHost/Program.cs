@@ -18,11 +18,10 @@ var store = builder.AddProject<Projects.Store>("store")
 
 if (builder.ExecutionContext.IsPublishMode)
 {
+    var appInsights = builder.AddAzureApplicationInsights("appInsights");
     var chatDeploymentName = "gpt-4.1-mini";
     var embeddingsDeploymentName = "text-embedding-ada-002";
-
-    var aoai = builder.AddAzureOpenAI("openai");
-    
+    var aoai = builder.AddAzureOpenAI("openai");   
     aoai.AddDeployment(name: chatDeploymentName,
             modelName: "gpt-4.1-mini",
             modelVersion: "2025-04-14");
@@ -30,7 +29,6 @@ if (builder.ExecutionContext.IsPublishMode)
         modelName: "text-embedding-ada-002",
         modelVersion: "2");
 
-    var appInsights = builder.AddAzureApplicationInsights("appInsights");
     var azureaisearch = builder.AddAzureSearch("azureaisearch");
     azureaisearch.WithReferenceRelationship(aoai)
         .WithReferenceRelationship(appInsights)

@@ -4,6 +4,12 @@ namespace SearchEntities;
 
 public class SearchResponse
 {
+    public SearchResponse()
+    {
+        Products = new List<DataEntities.Product>();
+        Response = string.Empty;
+    }
+
     [JsonPropertyName("id")]
     public string? Response { get; set; }
 
