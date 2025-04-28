@@ -216,8 +216,21 @@ static AzureOpenAIConfig GetAzureOpenAIConfig(WebApplicationBuilder builder, str
 
 static (string endpoint, string apiKey) GetEndpointAndKey(WebApplicationBuilder builder, string name, ILogger<Program> logger)
 {
-    logger.LogInformation($"Get endpoint and key for [{name}]");
-    var connectionString = builder.Configuration.GetConnectionString(name);
-    var parameters = HttpUtility.ParseQueryString(connectionString.Replace(";", "&"));
-    return (parameters["Endpoint"], parameters["Key"]);
+    try
+    {
+        logger.LogInformation($"Get endpoint and key for [{name}]");
+        var connectionString = builder.Configuration.GetConnectionString(name);
+        var parameters = HttpUtility.ParseQueryString(connectionString.Replace(";", "&"));
+
+        // Ensure non-null values for endpoint, key can be null
+        var endpoint = parameters["Endpoint"] ?? throw new InvalidOperationException($"Endpoint is missing for [{name}]");
+        var apiKey = parameters["Key"] ?? string.Empty;
+
+        return (endpoint, apiKey);
+    }
+    catch (Exception exc)
+    {
+        logger.LogError(exc, $"Error retrieving endpoint and key for [{name}]");
+        throw;
+    }
 }

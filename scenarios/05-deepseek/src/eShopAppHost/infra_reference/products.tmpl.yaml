@@ -56,6 +56,8 @@ properties:
             secretRef: connectionstrings--openai
           - name: ConnectionStrings__sqldb
             secretRef: connectionstrings--sqldb
+          - name: ConnectionStrings__deepseekr1
+            secretRef: connectionstrings--deepseekr1
     scale:
       minReplicas: 1
 tags:
