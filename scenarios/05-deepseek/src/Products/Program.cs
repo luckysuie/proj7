@@ -14,7 +14,7 @@ using System.Web;
 const string secretSectionNameOpenAI = "openai";
 const string secretSectionNameDeepSeekR1 = "deepseekr1";
 
-const string deploymentNameAzureOpenAIChat = "gpt-4o-mini";
+const string deploymentNameAzureOpenAIChat = "gpt-41-mini";
 const string deploymentNameAzureOpenAIEmbeddings = "text-embedding-ada-002";
 const string deploymentNameDeepSeekR1 = "DeepSeek-R1";
 

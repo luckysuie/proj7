@@ -29,6 +29,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
   tags: tags
 }
+
 module resources 'resources.bicep' = {
   scope: rg
   name: 'resources'
@@ -52,19 +53,10 @@ module openai 'openai/openai.module.bicep' = {
   scope: rg
   params: {
     location: location
-  }
-}
-module openai_roles 'openai-roles/openai-roles.module.bicep' = {
-  name: 'openai-roles'
-  scope: rg
-  params: {
-    location: location
-    openai_outputs_name: openai.outputs.name
     principalId: resources.outputs.MANAGED_IDENTITY_PRINCIPAL_ID
     principalType: 'ServicePrincipal'
   }
 }
-
 module deepseekr1 'deepseekr1/deepseekr1.module.bicep' = {
   name: 'deepseekr1'
   scope: rg
@@ -85,7 +77,8 @@ output AZURE_CONTAINER_APPS_ENVIRONMENT_NAME string = resources.outputs.AZURE_CO
 output AZURE_CONTAINER_APPS_ENVIRONMENT_ID string = resources.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_ID
 output AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN string = resources.outputs.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN
 output SERVICE_SQL_VOLUME_ESHOPAPPHOSTC8479139E4SQLDATA_NAME string = resources.outputs.SERVICE_SQL_VOLUME_ESHOPAPPHOSTC8479139E4SQLDATA_NAME
-output AZURE_VOLUMES_STORAGE_ACCOUNT string = resources.outputs.AZURE_VOLUMES_STORAGE_ACCOUNT
 output APPINSIGHTS_APPINSIGHTSCONNECTIONSTRING string = appInsights.outputs.appInsightsConnectionString
+output APPLICATIONINSIGHTS_CONNECTION_STRING string = appInsights.outputs.appInsightsConnectionString
 output OPENAI_CONNECTIONSTRING string = openai.outputs.connectionString
 output DEEPSEEKR1_CONNECTIONSTRING string = deepseekr1.outputs.connectionString
+output AZURE_VOLUMES_STORAGE_ACCOUNT string = resources.outputs.AZURE_VOLUMES_STORAGE_ACCOUNT
