@@ -78,7 +78,7 @@ builder.Services.AddActivatedKeyedSingleton<ChatClient>(chatClientNameDeepSeekR1
     logger.LogInformation($"Chat client configuration, modelId: {deploymentNameDeepSeekR1}");
     try
     {
-        var (endpoint, apiKey) = GetEndpointAndKey(builder, secretSectionNameDeepSeekR1);
+        var (endpoint, apiKey) = GetEndpointAndKey(builder, secretSectionNameDeepSeekR1, logger);
 
         // log the values of the endpoint and apiKey, but do not log the apiKey itself
         logger.LogInformation($"Endpoint: {endpoint}");
@@ -122,12 +122,12 @@ builder.Services.AddSingleton<IKernelMemory>(sp =>
     try
     {
         // Configure Text Generation
-        var configText = GetAzureOpenAIConfig(builder, secretSectionNameOpenAI);
+        var configText = GetAzureOpenAIConfig(builder, secretSectionNameOpenAI, logger);
         configText.Deployment = deploymentNameAzureOpenAIChat;
         configText.APIType = AzureOpenAIConfig.APITypes.TextCompletion;
 
         // Configure Embedding Generation
-        var configEmbeddings = GetAzureOpenAIConfig(builder, secretSectionNameOpenAI);
+        var configEmbeddings = GetAzureOpenAIConfig(builder, secretSectionNameOpenAI, logger);
         configEmbeddings.Deployment = deploymentNameAzureOpenAIEmbeddings;
         configEmbeddings.APIType = AzureOpenAIConfig.APITypes.EmbeddingGeneration;
 
@@ -197,9 +197,9 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
-static AzureOpenAIConfig GetAzureOpenAIConfig(WebApplicationBuilder builder, string name)
+static AzureOpenAIConfig GetAzureOpenAIConfig(WebApplicationBuilder builder, string name, ILogger<Program> logger)
 {
-    var (endpoint, apiKey) = GetEndpointAndKey(builder, name);
+    var (endpoint, apiKey) = GetEndpointAndKey(builder, name, logger);
     return string.IsNullOrEmpty(apiKey)
         ? new AzureOpenAIConfig
         {
@@ -214,8 +214,9 @@ static AzureOpenAIConfig GetAzureOpenAIConfig(WebApplicationBuilder builder, str
         };
 }
 
-static (string endpoint, string apiKey) GetEndpointAndKey(WebApplicationBuilder builder, string name)
+static (string endpoint, string apiKey) GetEndpointAndKey(WebApplicationBuilder builder, string name, ILogger<Program> logger)
 {
+    logger.LogInformation($"Get endpoint and key for [{name}]");
     var connectionString = builder.Configuration.GetConnectionString(name);
     var parameters = HttpUtility.ParseQueryString(connectionString.Replace(";", "&"));
     return (parameters["Endpoint"], parameters["Key"]);
