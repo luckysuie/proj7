@@ -79,6 +79,11 @@ builder.Services.AddActivatedKeyedSingleton<ChatClient>(chatClientNameDeepSeekR1
     try
     {
         var (endpoint, apiKey) = GetEndpointAndKey(builder, secretSectionNameDeepSeekR1);
+
+        // log the values of the endpoint and apiKey, but do not log the apiKey itself
+        logger.LogInformation($"Endpoint: {endpoint}");
+        logger.LogInformation($"ApiKey IsNullOrEmpty: {string.IsNullOrEmpty(apiKey)}");
+
         if (string.IsNullOrEmpty(apiKey))
         {
             // no apikey, use default azure credential  

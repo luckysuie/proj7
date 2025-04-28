@@ -45,4 +45,4 @@ module aiServices 'br/public:avm/res/cognitive-services/account:0.9.2' = {
   }
 }
 
-output connectionString string = 'Endpoint=${aiServices.outputs.endpoint}'
+output connectionString string = 'Endpoint=${aiServices.outputs.endpoint}/models'
