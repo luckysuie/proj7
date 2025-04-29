@@ -8,6 +8,7 @@ using OpenAI.Embeddings;
 using Products.Models;
 using SearchEntities;
 using System.Text;
+using VectorEntities;
 
 namespace Products.Memory;
 
@@ -84,10 +85,9 @@ public class MemoryContext
             var resultGenEmbeddings = await _embeddingClient.GenerateEmbeddingAsync(search);
             var embeddingsSearchQuery = resultGenEmbeddings.Value.ToFloats();
 
-            var searchOptions = new VectorSearchOptions
+            var searchOptions = new VectorSearchOptions<ProductVector>
             {
-                Top = 1,
-                VectorPropertyName = "Vector"
+                Top = 3
             };
 
             // search the vector database for the most similar product        

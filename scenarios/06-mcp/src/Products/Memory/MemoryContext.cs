@@ -125,27 +125,6 @@ public class MemoryContext
                 }
             }
 
-            //double searchScore = 0.0;
-            //await foreach (var searchItem in searchResults.Results)
-            //{
-            //    if (searchItem.Score > 0.5)
-            //    {
-            //        // product found, search the db for the product details                    
-            //        firstProduct = new Product
-            //        {
-            //            Id = searchItem.Record.Id,
-            //            Name = searchItem.Record.Name,
-            //            Description = searchItem.Record.Description,
-            //            Price = searchItem.Record.Price,
-            //            ImageUrl = searchItem.Record.ImageUrl
-            //        };
-
-            //        searchScore = searchItem.Score.Value;
-            //        responseText = $"The product [{firstProduct.Name}] fits with the search criteria [{search}][{searchItem.Score.Value.ToString("0.00")}]";
-            //        _logger.LogInformation($"Search Response: {responseText}");
-            //    }
-            //}
-
             // let's improve the response message
             var prompt = @$"You are an intelligent assistant helping clients with their search about outdoor products. 
 Generate a catchy and friendly message using the information below.

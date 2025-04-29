@@ -26,12 +26,12 @@ builder.AddSqlServerDbContext<Context>("sqldb");
 
 // in dev scenarios add "openai" user secrets info, check the official doc for the necessary steps
 var azureOpenAiClientName = "openai";
+var chatDeploymentName = "gpt-41-mini";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration
 builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 {
-    var chatDeploymentName = "gpt-4o-mini";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Chat client configuration, modelId: {chatDeploymentName}");
     ChatClient chatClient = null;
@@ -42,7 +42,7 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
     }
     catch (Exception exc)
     {
-        logger.LogError(exc, "Error creating embeddings client");
+        logger.LogError(exc, "Error creating Chat client");
     }
     return chatClient;
 });
@@ -80,19 +80,18 @@ builder.Services.AddSingleton<ChromaCollectionClient>(serviceProvider =>
         logger.LogInformation($"ChromaDB client configuration, key: {chromaDbService.Key}");
         logger.LogInformation($"ChromaDB client configuration, value: {chromaDbService.Value}");
 
-        if (!string.IsNullOrEmpty(chromaDbUri) && !chromaDbUri.EndsWith("/api/v1/"))
+        if (!string.IsNullOrEmpty(chromaDbUri) && !chromaDbUri.EndsWith("/api/v1"))
         {
-            logger.LogInformation("ChromaDB connection string does not end with /api/v1/, adding it");
-            chromaDbUri += "/api/v1/";
+            logger.LogInformation("ChromaDB connection string does not end with /api/v1, adding it");
+            chromaDbUri += "/api/v1";
         }
         logger.LogInformation($"ChromaDB client uri: {chromaDbUri}");
 
-
-        // 
         var configOptions = new ChromaConfigurationOptions(uri: chromaDbUri);
         var httpChromaClient = new HttpClient();
         var chromaClient = new ChromaClient(configOptions, httpChromaClient);
-        var collection = chromaClient.GetOrCreateCollection("products").Result;
+
+        var collection = chromaClient.GetOrCreateCollection("products").GetAwaiter().GetResult();
         chromaCollectionClient = new ChromaCollectionClient(collection, configOptions, httpChromaClient);
     }
     catch (Exception exc)
@@ -155,6 +154,19 @@ using (var scope = app.Services.CreateScope())
         app.Logger.LogError(exc, "Error creating database");
     }
     DbInitializer.Initialize(context);
+
+    // init memory context
+    var memoryContext = scope.ServiceProvider.GetRequiredService<MemoryContext>();
+    try
+    {
+        app.Logger.LogInformation("Initializing memory context");
+        var result = memoryContext.InitMemoryContextAsync(context).Result;
+        app.Logger.LogInformation($"Memory context initialized: {result}");
+    }
+    catch (Exception exc)
+    {
+        app.Logger.LogError(exc, "Error initializing memory context");
+    }
 }
 
 app.Run();
