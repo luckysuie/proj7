@@ -28,7 +28,7 @@ builder.Services.AddHttpClient<ParkInformationService>(
     static client => client.BaseAddress = new("https+http://parkinformationagent"));
 
 var azureOpenAiClientName = "openai";
-var chatDeploymentName = "gpt-41-mini";
+var chatDeploymentName = "gpt-4.1-mini";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration

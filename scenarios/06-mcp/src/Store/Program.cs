@@ -19,7 +19,7 @@ builder.Services.AddHttpClient("productsHttpClient", static client => client.Bas
 builder.Services.AddSingleton<McpServerService>();
 
 // add openai client
-var chatDeploymentName = "gpt-41-mini";
+var chatDeploymentName = "gpt-4.1-mini";
 var azureOpenAiClientName = "openai";
 builder.AddOpenAIClient(azureOpenAiClientName);
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
