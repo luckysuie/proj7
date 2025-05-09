@@ -52,6 +52,14 @@ module openai 'openai/openai.module.bicep' = {
   scope: rg
   params: {
     location: location
+  }
+}
+module openai_roles 'openai-roles/openai-roles.module.bicep' = {
+  name: 'openai-roles'
+  scope: rg
+  params: {
+    location: location
+    openai_outputs_name: openai.outputs.name
     principalId: resources.outputs.MANAGED_IDENTITY_PRINCIPAL_ID
     principalType: 'ServicePrincipal'
   }

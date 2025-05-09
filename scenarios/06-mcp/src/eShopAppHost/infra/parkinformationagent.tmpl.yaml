@@ -20,15 +20,10 @@ properties:
     registries:
       - server: {{ .Env.AZURE_CONTAINER_REGISTRY_ENDPOINT }}
         identity: {{ .Env.AZURE_CONTAINER_REGISTRY_MANAGED_IDENTITY_ID }}
-    secrets:
-      - name: applicationinsights-connection-string
-        value: '{{ .Env.APPINSIGHTS_APPINSIGHTSCONNECTIONSTRING }}'
-      - name: connectionstrings--openai
-        value: '{{ .Env.OPENAI_CONNECTIONSTRING }}'
   template:
     containers:
       - image: {{ .Image }}
-        name: store
+        name: parkinformationagent
         env:
           - name: AZURE_CLIENT_ID
             value: {{ .Env.MANAGED_IDENTITY_CLIENT_ID }}
@@ -42,16 +37,8 @@ properties:
             value: "true"
           - name: OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY
             value: in_memory
-          - name: services__eshopmcpserver__http__0
-            value: http://eshopmcpserver.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
-          - name: services__eshopmcpserver__https__0
-            value: https://eshopmcpserver.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
-          - name: APPLICATIONINSIGHTS_CONNECTION_STRING
-            secretRef: applicationinsights-connection-string
-          - name: ConnectionStrings__openai
-            secretRef: connectionstrings--openai
     scale:
       minReplicas: 1
 tags:
-  azd-service-name: store
-  aspire-resource-name: store
+  azd-service-name: parkinformationagent
+  aspire-resource-name: parkinformationagent

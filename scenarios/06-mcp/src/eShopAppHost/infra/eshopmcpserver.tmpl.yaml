@@ -33,7 +33,7 @@ properties:
           - name: AZURE_CLIENT_ID
             value: {{ .Env.MANAGED_IDENTITY_CLIENT_ID }}
           - name: AI_ChatDeploymentName
-            value: gpt-4o-mini
+            value: gpt-41-mini
           - name: AI_embeddingsDeploymentName
             value: text-embedding-ada-002
           - name: ASPNETCORE_FORWARDEDHEADERS_ENABLED
@@ -46,10 +46,22 @@ properties:
             value: "true"
           - name: OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY
             value: in_memory
+          - name: services__onlineresearcher__http__0
+            value: http://onlineresearcher.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
+          - name: services__onlineresearcher__https__0
+            value: https://onlineresearcher.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
+          - name: services__parkinformationagent__http__0
+            value: http://parkinformationagent.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
+          - name: services__parkinformationagent__https__0
+            value: https://parkinformationagent.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
           - name: services__products__http__0
             value: http://products.internal.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
           - name: services__products__https__0
             value: https://products.internal.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
+          - name: services__weatheragent__http__0
+            value: http://weatheragent.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
+          - name: services__weatheragent__https__0
+            value: https://weatheragent.{{ .Env.AZURE_CONTAINER_APPS_ENVIRONMENT_DEFAULT_DOMAIN }}
           - name: APPLICATIONINSIGHTS_CONNECTION_STRING
             secretRef: applicationinsights-connection-string
           - name: ConnectionStrings__openai
