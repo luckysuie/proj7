@@ -37,7 +37,8 @@ builder.Services.AddSingleton<IChatClient>(serviceProvider =>
         logger.LogInformation($"DONE getting .GetRequiredService<OpenAIClient>");
 
         logger.LogInformation($"getting client.AsChatClient(chatDeploymentName)");
-        chatClient = client.AsChatClient(chatDeploymentName)
+        chatClient = client.GetChatClient(chatDeploymentName)
+            .AsIChatClient()
             .AsBuilder()
             .UseFunctionInvocation()
             .Build();
