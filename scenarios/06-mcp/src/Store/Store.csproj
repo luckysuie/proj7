@@ -7,10 +7,10 @@
 		<UserSecretsId>88541b34-b9e3-4d23-b18b-67dcae1162ba</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.2.1-preview.1.25222.1" />
-		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.5.0-preview.1.25262.9" />
+		<PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.3.0-preview.1.25265.20" />
+		<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.5.0-preview.1.25265.7" />
 		<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
-		<PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.13" />
+		<PackageReference Include="ModelContextProtocol" Version="0.2.0-preview.1" />
 		<PackageReference Include="Markdig" Version="0.41.1" />
 	</ItemGroup>
 	<ItemGroup>
