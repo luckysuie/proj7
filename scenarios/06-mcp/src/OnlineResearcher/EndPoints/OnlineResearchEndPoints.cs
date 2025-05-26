@@ -1,8 +1,13 @@
+#pragma warning disable OPENAI001
+
+using Azure;
+using Azure.AI.Agents.Persistent;
 using Azure.AI.Projects;
 using Azure.Core;
 using Azure.Identity;
 using McpToolsEntities;
 using OnlineResearcher.Controllers;
+using OpenAI.Assistants;
 
 namespace OnlineResearcher.EndPoints;
 
@@ -33,100 +38,90 @@ public static class OnlineResearchEndPoints
         logger.LogInformation($"Search online for the query: {query}");
 
         // read settings from user secrets
-        var cnnstring = config["aifoundryproject_cnnstring"];
         var tenantid = config["aifoundryproject_tenantid"];
         var searchagentid = config["aifoundryproject_searchagentid"];
         var bingsearchconnectionName = config["aifoundryproject_groundingcnnname"];
+        var aifoundryproject_endpoint = config["aifoundryproject_endpoint"];
+        
 
         // show in the log the values from config
         logger.LogInformation($"Configuration values:");
-        logger.LogInformation($"AI Foundry Project - cnnstring: {cnnstring}");
         logger.LogInformation($"AI Foundry Project - tenantid: {tenantid}");
         logger.LogInformation($"AI Foundry Project - searchagentid: {searchagentid}");
         logger.LogInformation($"AI Foundry Project - bingsearchconnectionName: {bingsearchconnectionName}");
-
-        // Adding the custom headers policy
-        var clientOptions = new AIProjectClientOptions();
-        clientOptions.AddPolicy(new CustomHeadersPolicy(), HttpPipelinePosition.PerCall);
+        logger.LogInformation($"AI Foundry Project - endpoint: {aifoundryproject_endpoint}");
 
         // create credential
         var options = new DefaultAzureCredentialOptions();
         if (!string.IsNullOrEmpty(tenantid))
             options.TenantId = tenantid;
-        AIProjectClient projectClient = new AIProjectClient(cnnstring, new DefaultAzureCredential(options), clientOptions);
+        PersistentAgentsClient persistentClient = new(aifoundryproject_endpoint, new DefaultAzureCredential(options));
 
-        AgentsClient agentClient = projectClient.GetAgentsClient();
-        Agent? searchOnlineAgent = null;
-
+        PersistentAgent searchOnlineAgent = null;
         if (string.IsNullOrEmpty(searchagentid))
         {
-            string connectionId = "";
-            var tools = new List<ToolDefinition>();
+            BingGroundingToolDefinition bingGroundingTool = new(
+                new BingGroundingSearchToolParameters(
+                    [new BingGroundingSearchConfiguration(bingsearchconnectionName)]));
 
-            if (!string.IsNullOrEmpty(bingsearchconnectionName))
-            {
-                ConnectionResponse bingConnection = await projectClient.GetConnectionsClient().GetConnectionAsync(bingsearchconnectionName);
-                connectionId = bingConnection.Id;
-                ToolConnectionList connectionList = new ToolConnectionList
-                {
-                    ConnectionList = { new ToolConnection(connectionId) }
-                };
-                BingGroundingToolDefinition bingGroundingTool = new BingGroundingToolDefinition(connectionList);
-                tools.Add(bingGroundingTool);
-            }
-
-            var agentResponse = await agentClient.CreateAgentAsync(
-                model: "gpt-4-1106-preview",
-                name: "my-assistant",
-                instructions: "You are a helpful assistant that searches online for information.",
-                tools: tools);
-            searchOnlineAgent = agentResponse.Value;
+            searchOnlineAgent = await persistentClient.Administration.CreateAgentAsync(
+               model: "gpt-4.1",
+               name: "my-agent",
+               instructions: "You are a helpful agent.",
+               tools: [bingGroundingTool]);
         }
         else
         {
-            searchOnlineAgent = (await agentClient.GetAgentAsync(searchagentid)).Value;
+            searchOnlineAgent = persistentClient.Administration.GetAgent(searchagentid).Value;
         }
 
         // Create thread for communication
-        var threadResponse = await agentClient.CreateThreadAsync();
-        AgentThread thread = threadResponse.Value;
+        PersistentAgentThread thread = await persistentClient.Threads.CreateThreadAsync();
 
         // Create message to thread
-        var messageResponse = await agentClient.CreateMessageAsync(
+        PersistentThreadMessage message = await persistentClient.Messages.CreateMessageAsync(
             thread.Id,
-            MessageRole.User,
+            Azure.AI.Agents.Persistent.MessageRole.User,
             $"{query}");
-        ThreadMessage message = messageResponse.Value;
 
         // Run the agent
-        var runResponse = await agentClient.CreateRunAsync(thread, searchOnlineAgent);
-
-        while (runResponse.Value.Status == RunStatus.Queued || runResponse.Value.Status == RunStatus.InProgress)
+        var runResponse = await persistentClient.Runs.CreateRunAsync(thread, searchOnlineAgent);
+        do
         {
             await Task.Delay(TimeSpan.FromMilliseconds(500));
-            runResponse = await agentClient.GetRunAsync(thread.Id, runResponse.Value.Id);
+            runResponse = await persistentClient.Runs.GetRunAsync(thread.Id, runResponse.Value.Id);
         }
-
-        var afterRunMessagesResponse = await agentClient.GetMessagesAsync(thread.Id);
-        var messages = afterRunMessagesResponse.Value.Data;
+        while (runResponse.Value.Status == Azure.AI.Agents.Persistent.RunStatus.Queued
+            || runResponse.Value.Status == Azure.AI.Agents.Persistent.RunStatus.InProgress);
 
         string searchResult = "";
         logger.LogInformation("==========================");
         logger.LogInformation($"Search for '{query}'");
-        foreach (ThreadMessage threadMessage in messages)
+
+        AsyncPageable<PersistentThreadMessage> messages = persistentClient.Messages.GetMessagesAsync(
+threadId: thread.Id, order: ListSortOrder.Ascending);
+
+        await foreach (PersistentThreadMessage threadMessage in messages)
         {
-            logger.LogInformation($"{threadMessage.CreatedAt:yyyy-MM-dd HH:mm:ss} - {threadMessage.Role,10}: ");
-            if (threadMessage.Role.ToString().ToLower() == "assistant")
+            Console.Write($"{threadMessage.CreatedAt:yyyy-MM-dd HH:mm:ss} - {threadMessage.Role,10}: ");
+            foreach (Azure.AI.Agents.Persistent.MessageContent contentItem in threadMessage.ContentItems)
             {
-                foreach (MessageContent contentItem in threadMessage.ContentItems)
+                if (contentItem is MessageTextContent textItem)
                 {
-                    if (contentItem is MessageTextContent textItem)
-                    {
-                        searchResult += textItem.Text + "\n";
-                    }
+                    Console.Write(textItem.Text);
+                    searchResult += textItem.Text;
+                    searchResult += "\n";
+
                 }
+                else if (contentItem is MessageImageFileContent imageFileItem)
+                {
+                    Console.Write($"<image from ID: {imageFileItem.FileId}");
+                }
+                Console.WriteLine();
             }
         }
+
+
         logger.LogInformation($"Search result:");
         logger.LogInformation(searchResult);
         logger.LogInformation("==========================");

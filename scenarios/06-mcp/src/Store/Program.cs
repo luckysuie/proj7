@@ -1,7 +1,6 @@
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 using OpenAI;
 using OpenAI.Chat;
 using Services;
