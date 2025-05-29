@@ -1,7 +1,3 @@
-using Aspire.Azure.AI.OpenAI;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
@@ -21,9 +17,10 @@ builder.Services.AddProblemDetails();
 // Add DbContext service
 builder.AddSqlServerDbContext<Context>("sqldb");
 
-// in dev scenarios check the documentation to reuse existing AOAI resources
+// in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
-var chatDeploymentName = "gpt-41-mini";
+var chatDeploymentName = "gpt-4.1-mini";
+var embeddingsDeploymentName = "text-embedding-ada-002";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration
@@ -47,7 +44,6 @@ builder.Services.AddSingleton<ChatClient>(serviceProvider =>
 // get azure openai client and create embedding client from aspire hosting configuration
 builder.Services.AddSingleton<EmbeddingClient>(serviceProvider =>
 {
-    var embeddingsDeploymentName = "text-embedding-ada-002";
     var logger = serviceProvider.GetService<ILogger<Program>>()!;
     logger.LogInformation($"Embeddings client configuration, modelId: {embeddingsDeploymentName}");
     EmbeddingClient embeddingsClient = null;
@@ -108,16 +104,10 @@ using (var scope = app.Services.CreateScope())
     }
     DbInitializer.Initialize(context);
 
-    // init the memory context
-    var memoryContext = scope.ServiceProvider.GetRequiredService<MemoryContext>();
-    try
-    {
-        memoryContext.InitMemoryContextAsync(context).Wait();
-    }
-    catch (Exception exc)
-    {
-        app.Logger.LogError(exc, "Error initializing memory context");
-    }
+    app.Logger.LogInformation("Start fill products in vector db");
+    var memoryContext = app.Services.GetRequiredService<MemoryContext>();
+    await memoryContext.InitMemoryContextAsync(context);
+    app.Logger.LogInformation("Done fill products in vector db");
 }
 
 app.Run();
