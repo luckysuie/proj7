@@ -1,4 +1,5 @@
 ﻿using DataEntities;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.VectorData;
 using Microsoft.SemanticKernel.Connectors.InMemory;
@@ -9,6 +10,7 @@ using Products.Models;
 using SearchEntities;
 using System.Text;
 using VectorEntities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Products.Memory;
 
@@ -17,7 +19,7 @@ public class MemoryContext
     private ILogger _logger;
     public ChatClient? _chatClient;
     public EmbeddingClient? _embeddingClient;
-    public IVectorStoreRecordCollection<int, ProductVector> _productsCollection;
+    public VectorStoreCollection<int, ProductVector> _productsCollection;
     private string _systemPrompt = "";
     private bool _isMemoryCollectionInitialized = false;
 
@@ -37,7 +39,7 @@ public class MemoryContext
         _logger.LogInformation("Initializing memory context");
         var vectorProductStore = new InMemoryVectorStore();
         _productsCollection = vectorProductStore.GetCollection<int, ProductVector>("products");
-        await _productsCollection.CreateCollectionIfNotExistsAsync();
+        await _productsCollection.EnsureCollectionExistsAsync();
 
         // define system prompt
         _systemPrompt = "You are a useful assistant. You always reply with a short and funny message. If you do not know an answer, you say 'I don't know that.' You only answer questions related to outdoor camping products. For any other type of questions, explain to the user that you only answer outdoor camping products questions. Do not store memory of the chat conversation.";
@@ -68,8 +70,8 @@ public class MemoryContext
                 var result = await _embeddingClient.GenerateEmbeddingAsync(productInfo);
 
                 productVector.Vector = result.Value.ToFloats();
-                var recordId = await _productsCollection.UpsertAsync(productVector);
-                _logger.LogInformation("Product added to memory: {Product} with recordId: {RecordId}", product.Name, recordId);
+                await _productsCollection.UpsertAsync(productVector);
+                _logger.LogInformation("Product added to memory: {Product}", product.Name);
             }
             catch (Exception exc)
             {
@@ -99,20 +101,15 @@ public class MemoryContext
             var result = await _embeddingClient.GenerateEmbeddingAsync(search);
             var vectorSearchQuery = result.Value.ToFloats();
 
-            var searchOptions = new VectorSearchOptions<ProductVector>()
-            {
-                Top = 3
-            };
-
             // search the vector database for the most similar product        
-            var searchResults = await _productsCollection.VectorizedSearchAsync(vectorSearchQuery, searchOptions);
             var sbFoundProducts = new StringBuilder();
             int productPosition = 1;
-            await foreach (var searchItem in searchResults.Results)
+
+            await foreach (var resultItem in _productsCollection.SearchAsync(vectorSearchQuery, top: 3))
             {
-                if (searchItem.Score > 0.5)
+                if (resultItem.Score > 0.5)
                 {
-                    var product = await db.FindAsync<Product>(searchItem.Record.Id);
+                    var product = await db.FindAsync<Product>(resultItem.Record.Id);
                     if (product != null)
                     {
                         response.Products.Add(product);
