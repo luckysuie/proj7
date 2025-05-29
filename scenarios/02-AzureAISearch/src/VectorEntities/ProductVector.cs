@@ -3,21 +3,24 @@ using Microsoft.Extensions.VectorData;
 
 namespace VectorEntities
 {
-    public class ProductVector : Product
+    public class ProductVector
     {
-        [VectorStoreRecordKey]
-        public override int Id { get => base.Id; set => base.Id = value; }
+        [VectorStoreKey]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        [VectorStoreRecordData]
-        public override string? Name { get => base.Name; set => base.Name = value; }
+        [VectorStoreData]
+        public string? Name { get; set; } = string.Empty;
 
-        [VectorStoreRecordData]
-        public override string? Description { get => base.Description; set => base.Description = value; }
+        [VectorStoreData]
+        public string? Description { get; set; } = string.Empty;
 
-        [VectorStoreRecordData]
-        public override decimal Price { get => base.Price; set => base.Price = value; }
+        [VectorStoreData]
+        public string Price { get; set; } = string.Empty;
 
-        [VectorStoreRecordVector(384, DistanceFunction.CosineSimilarity)]
+        [VectorStoreVector(1536)]
         public ReadOnlyMemory<float> Vector { get; set; }
+
+        [VectorStoreData]
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

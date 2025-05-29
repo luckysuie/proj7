@@ -17,7 +17,7 @@ builder.Services.AddProblemDetails();
 // Add DbContext service
 builder.AddSqlServerDbContext<Context>("sqldb");
 
-// in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
+// in dev scenarios check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
 var chatDeploymentName = "gpt-4.1-mini";
 var embeddingsDeploymentName = "text-embedding-ada-002";
