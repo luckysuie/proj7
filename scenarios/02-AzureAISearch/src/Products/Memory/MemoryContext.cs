@@ -19,7 +19,7 @@ public class MemoryContext
     public ChatClient? _chatClient;
     public EmbeddingClient? _embeddingClient;
     public SearchIndexClient? _azureSearchIndexClient;
-    // here
+    // Collection for storing and searching product vectors in the memory context
     public VectorStoreCollection<string, ProductVector> _productsCollection;
     private string _systemPrompt = "";
     private bool _isMemoryCollectionInitialized = false;
