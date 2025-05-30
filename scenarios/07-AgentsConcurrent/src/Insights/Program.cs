@@ -1,3 +1,4 @@
+using Azure.AI.OpenAI;
 using Insights;
 using Insights.Endpoints;
 using Insights.Models;
@@ -58,10 +59,10 @@ builder.Services.AddSingleton(sp =>
     var logger = sp.GetService<ILogger<Program>>()!;
     logger.LogInformation("Creating insights generator service context");
 
-    OpenAIClient client = sp.GetRequiredService<OpenAIClient>();
+    AzureOpenAIClient client = sp.GetRequiredService<AzureOpenAIClient>();
 
     var skBuilder = Kernel.CreateBuilder();
-    skBuilder.AddAzureOpenAIChatClient(deploymentName: chatDeploymentName);
+    skBuilder.AddAzureOpenAIChatClient(deploymentName: chatDeploymentName, client);
     var kernel = skBuilder.Build();   
     
     return kernel;

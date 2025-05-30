@@ -1,5 +1,6 @@
 ﻿using DataEntities;
 using Insights.Models;
+using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Orchestration;
@@ -10,7 +11,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using OpenAI.Chat;
 
-#pragma warning disable SKEXP0110 
+#pragma warning disable SKEXP0001, SKEXP0110 
 
 namespace Insights;
 
@@ -41,8 +42,14 @@ public class Generator
 
 
         // Define the orchestration with transform
-        StructuredOutputTransform<Analysis> outputTransform = new(_kernel.GetRequiredService<IChatCompletionService>(),
-                new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) });
+        //StructuredOutputTransform<Analysis> outputTransform = new(_kernel.GetRequiredService<IChatCompletionService>(),
+        //        new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) });
+
+        StructuredOutputTransform<Analysis> outputTransform = 
+            new(
+                service: _chatClient.AsIChatClient().AsChatCompletionService(), 
+                executionSettings: new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) }
+                );
 
         ConcurrentOrchestration<string, Analysis> orchestration =
             new(agentSentiment, agentLanguage)
