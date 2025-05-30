@@ -1,0 +1,54 @@
+﻿@page "/insights"
+@using DataEntities
+@using Store.Services
+@inject UserInsightService UserInsightService
+@inject IConfiguration Configuration
+@attribute [StreamRendering(true)]
+
+<PageTitle>User Insights</PageTitle>
+
+<h1>Insights</h1>
+
+<p>Here are some insights from the previous searches.</p>
+
+@if (userQuestionInsights == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Question</th>
+                <th>Language</th>
+                <th>Sentiment</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var insight in userQuestionInsights)
+            {
+                <tr>
+                    <td>@insight.Id</td>
+                    <td>@insight.Question</td>
+                    <td>@insight.Language</td>
+                    <td>@insight.Sentiment</td>
+                    <td>@insight.CreatedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<UserQuestionInsight>? userQuestionInsights;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+        userQuestionInsights = await UserInsightService.GetUserInsights();
+    }
+}
