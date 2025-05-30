@@ -1,5 +1,6 @@
 ﻿using DataEntities;
 using Insights.Models;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -9,6 +10,7 @@ using Microsoft.SemanticKernel.Agents.Orchestration.Transforms;
 using Microsoft.SemanticKernel.Agents.Runtime.InProcess;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SqlServer.Server;
 using OpenAI.Chat;
 
 #pragma warning disable SKEXP0001, SKEXP0110 
@@ -33,47 +35,37 @@ public class Generator
         // Define the agents
         ChatCompletionAgent agentSentiment =
             CreateAgent(
-                instructions: "You are an expert in sentiment analysis. Given a string, evaluate its sentiment and return one of the following values: positive, neutral, or negative.",
+                instructions: @"You are an expert in sentiment analysis. Given a string, evaluate its sentiment and return one of the following values: positive, neutral, or negative. 
+The output should be in the format 'Sentiment:<detected sentiment>', in example: 'Sentiment:positive'",
                 description: "An expert in evaluating and classifying the sentiment of text as positive, neutral, or negative.");
         ChatCompletionAgent agentLanguage =
             this.CreateAgent(
-                instructions: "You are an expert in language detection. Given a string, detect the language and return its standard language code (e.g., en for English, es for Spanish, fr for French, etc.).",
+                instructions: @"You are an expert in language detection. Given a string, detect the language and return its standard language code (e.g., en for English, es for Spanish, fr for French, etc.).
+The output should be in the format 'Language:<detected language>', in example: 'Language:en'",
                 description: "An expert in detecting the language of text and returning its language code.");
 
-
-        // Define the orchestration with transform
-        //StructuredOutputTransform<Analysis> outputTransform = new(_kernel.GetRequiredService<IChatCompletionService>(),
-        //        new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) });
-
-        StructuredOutputTransform<Analysis> outputTransform = 
-            new(
-                service: _chatClient.AsIChatClient().AsChatCompletionService(), 
-                executionSettings: new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) }
-                );
-
-        ConcurrentOrchestration<string, Analysis> orchestration =
-            new(agentSentiment, agentLanguage)
-            {
-                ResultTransform = outputTransform.TransformAsync,
-            };
+        StructuredOutputTransform<Analysis> outputTransform = new(
+            service: _chatClient.AsIChatClient().AsChatCompletionService(), 
+            executionSettings: new OpenAIPromptExecutionSettings { ResponseFormat = typeof(Analysis) });
+        ConcurrentOrchestration orchestration = new(agentSentiment, agentLanguage);
 
         // Start the runtime
         InProcessRuntime runtime = new();
         await runtime.StartAsync();
-        OrchestrationResult<Analysis> result = await orchestration.InvokeAsync(search, runtime);
+        OrchestrationResult<string[]> output = await orchestration.InvokeAsync(search, runtime);
 
-        Analysis output = await result.GetValueAsync();
-        
+        // analyze the result of the concurrent agents run
+        string[] analysisResults = await output.GetValueAsync(TimeSpan.FromSeconds(60));
+        var analysisResult = TransformToAnalysis(analysisResults);
         await runtime.RunUntilIdleAsync();
 
-
-        // add sample insight to the database
+        // add insight to the database
         var insight = new UserQuestionInsight
         {
             CreatedAt = DateTime.UtcNow,
             Question = search,
-            Sentiment = output.Sentiment, // Sentiment.Neutral,
-            Language = output.Language // "en"
+            Sentiment = analysisResult.Sentiment, 
+            Language = analysisResult.Language
         };
         db.UserQuestionInsight.Add(insight);
         await db.SaveChangesAsync();
@@ -93,10 +85,29 @@ public class Generator
             };
     }
     
-    protected void LogInsight(UserQuestionInsight insight)
+    public Analysis TransformToAnalysis(string[] messages)
     {
-        _logger.LogInformation($"Added insight: {insight.Question} with Sentiment: {insight.Sentiment} and Language: {insight.Language}");
-    }   
+        Analysis analysisResult = new Analysis();
+        
+        foreach (var message in messages)
+        {
+            // analyze the message to see if it is a sentiment or language, and set the result into the analysisResult object
+            if (message.Contains("sentiment", StringComparison.OrdinalIgnoreCase))
+            {
+                // Extract sentiment from the message
+                var sentiment = message.Split(':')[1].Trim();
+                analysisResult.Sentiment = Enum.TryParse<Sentiment>(sentiment, true, out var parsedSentiment) ? parsedSentiment : Sentiment.NotDefined;
+            }
+            else if (message.Contains("language", StringComparison.OrdinalIgnoreCase))
+            {
+                // Extract language from the message
+                var language = message.Split(':')[1].Trim();
+                analysisResult.Language = language;
+            }
+        }
+
+        return analysisResult;
+    }
 }
 
 public class Analysis
