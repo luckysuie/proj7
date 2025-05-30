@@ -50,7 +50,5 @@ if (builder.ExecutionContext.IsPublishMode)
         .WithExternalHttpEndpoints();
 }
 
-builder.AddProject<Projects.Insights>("insights");
-
 builder.Build().Run();
 

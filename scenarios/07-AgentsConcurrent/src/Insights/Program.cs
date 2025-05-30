@@ -1,4 +1,5 @@
 using Insights;
+using Insights.Endpoints;
 using Insights.Models;
 using OpenAI;
 using OpenAI.Chat;
@@ -60,6 +61,7 @@ builder.Services.AddSingleton(sp =>
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
+app.MapInsightsEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
