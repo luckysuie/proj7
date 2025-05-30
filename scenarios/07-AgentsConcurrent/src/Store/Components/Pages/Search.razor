@@ -1,6 +1,7 @@
 ﻿@page "/search"
 
 @inject Store.Services.ProductService ProductService
+@inject Store.Services.UserInsightService UserInsightService
 @inject IConfiguration Configuration
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
@@ -65,6 +66,10 @@ else
     private async Task DoSearch(MouseEventArgs e)
     {
         await Task.Delay(500);
+
+        // launch UserInsightService.GenerateInsights(searchTerm) in a separate thread
+        var insightsTask = Task.Run(() => UserInsightService.GenerateInsights(searchTerm));
+
         var response = await ProductService.Search(searchTerm, smartSearch);
         aiResponse = response.Response;
         products = response.Products;
