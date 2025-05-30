@@ -120,7 +120,7 @@ To run the project locally, you'll need to make sure the following tools are ins
 - [Visual Studio Code](https://code.visualstudio.com/Download) or [Visual Studio](https://visualstudio.microsoft.com/downloads/)
   - If using Visual Studio Code, install the [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
   Installed with the [Visual Studio installer](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire) or the [.NET CLI workload](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire).
-  Installed with the [Visual Studio installer](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire) or the [.NET CLI workload](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire).
+  Installed with the [Visual Studio installer](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire) or the [.NET CLI workload](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire).
 - An OCI compliant container runtime, such as:
   - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/).
 
@@ -208,7 +208,7 @@ private async Task DoSearch(MouseEventArgs e)
 
 ## .NET Aspire Azure Resources creation
 The eShopLite MCP solution leverages .NET Aspire to create and manage the necessary Azure resources for deployment. For information on how .NET Aspire creates Azure resources, check the [.NET Aspire Azure hosting integrations](https://learn.microsoft.com/dotnet/aspire/azure/local-provisioning#net-aspire-azure-hosting-integrations) documentation.
-The eShopLite MCP solution leverages .NET Aspire to create and manage the necessary Azure resources for deployment. For information on how .NET Aspire creates Azure resources, check the [.NET Aspire Azure hosting integrations](https://learn.microsoft.com/en-us/dotnet/aspire/azure/local-provisioning#net-aspire-azure-hosting-integrations) documentation.
+The eShopLite MCP solution leverages .NET Aspire to create and manage the necessary Azure resources for deployment. For information on how .NET Aspire creates Azure resources, check the [.NET Aspire Azure hosting integrations](https://learn.microsoft.com/dotnet/aspire/azure/local-provisioning#net-aspire-azure-hosting-integrations) documentation.
 
 ### Local development using an existing model
 
