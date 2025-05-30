@@ -110,7 +110,7 @@ To run the project locally, you'll need to make sure the following tools are ins
 - [Visual Studio Code](https://code.visualstudio.com/Download) or [Visual Studio](https://visualstudio.microsoft.com/downloads/)
   - If using Visual Studio Code, install the [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
 - .NET Aspire workload:
-    Installed with the [Visual Studio installer](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire) or the [.NET CLI workload](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire).
+    Installed with the [Visual Studio installer](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire) or the [.NET CLI workload](https://learn.microsoft.com/dotnet/aspire/fundamentals/setup-tooling?tabs=windows&pivots=visual-studio#install-net-aspire).
 - An OCI compliant container runtime, such as:
   - [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Podman](https://podman.io/).
 
@@ -208,7 +208,7 @@ You may want to consider additional security measures, such as:
 
 ## Resources
 
-- [GPT-4o Realtime API Quickstart](https://learn.microsoft.com/en-us/azure/ai-services/openai/realtime-audio-quickstart)
+- [GPT-4o Realtime API Quickstart](https://learn.microsoft.com/azure/ai-services/openai/realtime-audio-quickstart)
 
 - [eShopLite Semantic Search Repository](https://aka.ms/netaieshoplitesemanticsearch)
 
@@ -216,4 +216,4 @@ You may want to consider additional security measures, such as:
 
 ## Video Recordings
 
-- [eShopLite - Real-time Audio Chat Overview](https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners-dotnet/practical-samples-eshoplite-with-real-time-audio)
+- [eShopLite - Real-time Audio Chat Overview](https://learn.microsoft.com/shows/generative-ai-for-beginners-dotnet/practical-samples-eshoplite-with-real-time-audio)
