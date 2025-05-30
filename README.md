@@ -42,7 +42,6 @@ The project includes several scenarios demonstrating different capabilities:
 | [04 - Chroma DB](./scenarios/04-chromadb/) | Implements semantic search functionality using Chroma DB, an open-source database designed for AI applications. | Chroma DB, OpenAI Embeddings, .NET SDK |
 | [05 - DeepSeek-R1](./scenarios/05-deepseek/) | Demonstrates integration of the DeepSeek-R1 model for enhanced semantic understanding and search capabilities. | DeepSeek-R1, .NET Aspire, Vector Embeddings |
 | [06 - Model Context Protocol (MCP)](./scenarios/06-mcp/) | Implements the Model Context Protocol (MCP) for advanced AI interactions with MCP Servers and MCP Clients. | Model Context Protocol, Function Calling, SSE Events |
-
 | [07 - Agents Concurrent](./scenarios/07-AgentsConcurrent/) | Demonstrates concurrent agent orchestration and advanced AI agent collaboration patterns. | .NET Aspire, Multi-Agent Systems, Orchestration |
 
 ## Getting Started
