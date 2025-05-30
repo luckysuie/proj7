@@ -10,6 +10,10 @@ builder.Services.AddSingleton<ProductService>();
 builder.Services.AddHttpClient<ProductService>(
     static client => client.BaseAddress = new("https+http://products"));
 
+builder.Services.AddSingleton<UserInsightService>();
+builder.Services.AddHttpClient<UserInsightService>(
+    static client => client.BaseAddress = new("https+http://insights"));
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();

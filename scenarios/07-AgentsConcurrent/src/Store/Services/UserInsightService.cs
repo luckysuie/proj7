@@ -1,5 +1,4 @@
-﻿using SearchEntities;
-using DataEntities;
+﻿using DataEntities;
 using System.Text.Json;
 
 namespace Store.Services;
