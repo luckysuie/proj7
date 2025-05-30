@@ -9,7 +9,9 @@ public enum Sentiment
     [JsonPropertyName("neutral")]
     Neutral,
     [JsonPropertyName("negative")]
-    Negative
+    Negative,
+    [JsonPropertyName("notdefined")]
+    NotDefined
 }
 
 public class UserQuestionInsight

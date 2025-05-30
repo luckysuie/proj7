@@ -1,6 +1,8 @@
 using Insights;
 using Insights.Endpoints;
 using Insights.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
@@ -50,13 +52,29 @@ builder.Services.AddSingleton<IConfiguration>(sp =>
     return builder.Configuration;
 });
 
+// add semantic kernel
+builder.Services.AddSingleton(sp =>
+{
+    var logger = sp.GetService<ILogger<Program>>()!;
+    logger.LogInformation("Creating insights generator service context");
+
+    OpenAIClient client = sp.GetRequiredService<OpenAIClient>();
+
+    var skBuilder = Kernel.CreateBuilder();
+    skBuilder.AddAzureOpenAIChatClient(deploymentName: chatDeploymentName);
+    var kernel = skBuilder.Build();   
+    
+    return kernel;
+});
+
 // add insights generator service
 builder.Services.AddSingleton(sp =>
 {
     var logger = sp.GetService<ILogger<Program>>()!;
     logger.LogInformation("Creating insights generator service context");
-    return new Generator(logger, sp.GetService<ChatClient>());
+    return new Generator(logger, sp.GetService<ChatClient>(), sp.GetService<Kernel>());
 });
+
 
 var app = builder.Build();
 
