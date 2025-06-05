@@ -35,7 +35,8 @@ public static class OnlineResearchEndPoints
     internal static async Task<OnlineSearchToolResponse> SearchOnlineAsync(string query, ILogger<Program> logger, IConfiguration config)
     {
         logger.LogInformation("==========================");
-        logger.LogInformation($"Search online for the query: {query}");
+        var sanitizedQuery = query.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        logger.LogInformation($"Search online for the query: {sanitizedQuery}");
 
         // read settings from user secrets
         var tenantid = config["aifoundryproject_tenantid"];
@@ -96,7 +97,8 @@ public static class OnlineResearchEndPoints
 
         string searchResult = "";
         logger.LogInformation("==========================");
-        logger.LogInformation($"Search for '{query}'");
+        var sanitizedQuery = query.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        logger.LogInformation($"Search for '{sanitizedQuery}'");
 
         AsyncPageable<PersistentThreadMessage> messages = persistentClient.Messages.GetMessagesAsync(
 threadId: thread.Id, order: ListSortOrder.Ascending);
