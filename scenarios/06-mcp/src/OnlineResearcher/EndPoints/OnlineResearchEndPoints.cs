@@ -49,7 +49,8 @@ public static class OnlineResearchEndPoints
         logger.LogInformation($"AI Foundry Project - tenantid: {tenantid}");
         logger.LogInformation($"AI Foundry Project - searchagentid: {searchagentid}");
         logger.LogInformation($"AI Foundry Project - bingsearchconnectionName: {bingsearchconnectionName}");
-        logger.LogInformation($"AI Foundry Project - endpoint: {aifoundryproject_endpoint}");
+        var sanitizedEndpoint = aifoundryproject_endpoint?.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        logger.LogInformation($"AI Foundry Project - endpoint: {sanitizedEndpoint}");
 
         // create credential
         var options = new DefaultAzureCredentialOptions();
