@@ -23,16 +23,15 @@ public static class ProductApiActions
 
     public static async Task<IResult> UpdateProduct(int id, Product product, Products.Models.Context db)
     {
-        var affected = await db.Product
-            .Where(m => m.Id == id)
-            .ExecuteUpdateAsync(setters => setters
-                .SetProperty(m => m.Id, product.Id)
-                .SetProperty(m => m.Name, product.Name)
-                .SetProperty(m => m.Description, product.Description)
-                .SetProperty(m => m.Price, product.Price)
-                .SetProperty(m => m.ImageUrl, product.ImageUrl)
-            );
-        return affected == 1 ? Results.Ok() : Results.NotFound();
+        var existing = await db.Product.FirstOrDefaultAsync(m => m.Id == id);
+        if (existing == null)
+            return Results.NotFound();
+        existing.Name = product.Name;
+        existing.Description = product.Description;
+        existing.Price = product.Price;
+        existing.ImageUrl = product.ImageUrl;
+        await db.SaveChangesAsync();
+        return Results.Ok();
     }
 
     public static async Task<IResult> CreateProduct(Product product, Products.Models.Context db)
