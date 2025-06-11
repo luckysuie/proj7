@@ -16,7 +16,7 @@ The reference application is part of the **[Generative AI for Beginners .NET](ht
   - [Run locally](#run-locally)
   - [Run the solution](#run-the-solution)
   - [.NET Aspire Azure Resources creation](#net-aspire-azure-resources-creation)
-  - [Local dev using an existing model](#local-development-using-an-existing-gpt-4o-model)
+  - [Local dev using an existing model](#local-development-using-existing-models)
   - [Telemetry with .NET Aspire and Azure Application Insights](#telemetry-with-net-aspire-and-azure-application-insights)
 - [Resources](#resources)
 - [Video Recordings](#video-recordings)
