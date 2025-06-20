@@ -36,7 +36,7 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 
 ## Main Concepts in this Scenario
 
-This scenario demonstrates how to use SQL Server 2025's new vector search and vector index features in a .NET Aspire application. The main concepts and implementation details are:
+This scenario demonstrates how to use [SQL Server 2025's Vector search and Vector index features](https://learn.microsoft.com/en-us/sql/relational-databases/vectors/vectors-sql-server?view=sql-server-ver17) in a .NET Aspire application. The main concepts and implementation details are:
 
 - The .NET Aspire AppHost project creates the SQL Server 2025 instance using a custom Dockerfile: [`scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker`](scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker). This file uses an image from the Docker repository for SQL Server 2025: [Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/r/microsoft/mssql-server/).
 
@@ -120,7 +120,7 @@ However, Azure Container Registry has a fixed cost per registry per day.
 
 You can try the [Azure pricing calculator](https://azure.com/e/2176802ea14941e4959eae8ad335aeb5) for the resources:
 
-- Azure OpenAI Service: S0 tier, gpt-4.1-mini and text-embedding-ada-002 models. Pricing is based on token count. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
+- Azure OpenAI Service: S0 tier, gpt-4.1-mini and text-embedding-3-small models. Pricing is based on token count. [Pricing](https://azure.microsoft.com/pricing/details/cognitive-services/openai-service/)
 - Azure Container App: Consumption tier with 0.5 CPU, 1GiB memory/storage. Pricing is based on resource allocation, and each month allows for a certain amount of free usage. [Pricing](https://azure.microsoft.com/pricing/details/container-apps/)
 - Azure Container Registry: Basic tier. [Pricing](https://azure.microsoft.com/pricing/details/container-registry/)
 - Log analytics: Pay-as-you-go tier. Costs based on data ingested. [Pricing](https://azure.microsoft.com/pricing/details/monitor/)
