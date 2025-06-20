@@ -39,52 +39,68 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 This scenario demonstrates how to use SQL Server 2025's new vector search and vector index features in a .NET Aspire application. The main concepts and implementation details are:
 
 - The .NET Aspire AppHost project creates the SQL Server 2025 instance using a custom Dockerfile: [`scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker`](scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker). This file uses an image from the Docker repository for SQL Server 2025: [Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/r/microsoft/mssql-server/).
+
+    ```dockerfile
+    # Use the official SQL Server 2025 Preview image
+    FROM mcr.microsoft.com/mssql/server:2025-latest
+    
+    # Set environment variables for SQL Server authentication
+    ENV ACCEPT_EULA=Y
+    ENV SA_PASSWORD=< sa password >
+    
+    # Expose SQL Server port	
+    EXPOSE 1433
+    
+    # Start SQL Server
+    CMD ["/opt/mssql/bin/sqlservr"]
+    ```
+
 - The logic for initializing and running the SQL Server container is implemented in [`scenarios/08-Sql2025/src/eShopAppHost/Program.cs`](scenarios/08-Sql2025/src/eShopAppHost/Program.cs):
 
-```csharp
-var builder = DistributedApplication.CreateBuilder(args);
-
-var password = builder.AddParameter("password", "Password123", secret: true);
-
-var sql = builder.AddSqlServer("sql", password)
-    .WithLifetime(ContainerLifetime.Persistent)
-    .WithDockerfile(@".\", "sql2025.docker");
-
-var productsDb = sql
-    .WithDataVolume()
-    .AddDatabase("productsDb");
-
-var products = builder.AddProject<Projects.Products>("products")
-    .WithReference(productsDb)
-    .WaitFor(productsDb);
-
-```
+    ```csharp
+    var builder = DistributedApplication.CreateBuilder(args);
+    
+    var password = builder.AddParameter("password", "< sa password >", secret: true);
+    
+    var sql = builder.AddSqlServer("sql", password)
+        .WithLifetime(ContainerLifetime.Persistent)
+        .WithDockerfile(@".\", "sql2025.docker");
+    
+    var productsDb = sql
+        .WithDataVolume()
+        .AddDatabase("productsDb");
+    
+    var products = builder.AddProject<Projects.Products>("products")
+        .WithReference(productsDb)
+        .WaitFor(productsDb);    
+    ```
 
 - Using an embedding client, once the database is initialized and a set of sample products is added, a new vector field is completed using an embedding. This logic is in [`scenarios/08-Sql2025/src/Products/Models/DbInitializer.cs`](./src/Products/Models/DbInitializer.cs).
+
 - The `ProductApiActions` class ([`scenarios/08-Sql2025/src/Products/Endpoints/ProductApiActions.cs`](./src/Products/Endpoints/ProductApiActions.cs)) implements an `AISearch()` function that performs semantic search using [EFCore.SqlServer.VectorSearch](https://www.nuget.org/packages/EFCore.SqlServer.VectorSearch/9.0.0-preview.2#show-readme-container) functions:
 
-```csharp
-public static async Task<IResult> AISearch(string search, Context db, EmbeddingClient embeddingClient, int dimensions = 1536)
-{
-    Console.WriteLine("Querying for similar products...");
-
-    var embeddingSearch = embeddingClient.GenerateEmbedding(search, new() { Dimensions = dimensions });
-    var vectorSearch = embeddingSearch.Value.ToFloats().ToArray();
-    var products = await db.Product
-        .OrderBy(p => EF.Functions.VectorDistance("cosine", p.Embedding, vectorSearch))
-        .Take(3)
-        .ToListAsync();
-
-    var response = new SearchResponse
+    ```csharp
+    public static async Task<IResult> AISearch(string search, Context db, EmbeddingClient embeddingClient, int dimensions = 1536)
     {
-        Products = products,
-        Response = products.Count > 0 ?
-            $"{products.Count} Products found for [{search}]" :
-            $"No products found for [{search}]"
-    };
-    return Results.Ok(response);
-}
-```
+        Console.WriteLine("Querying for similar products...");
+    
+        var embeddingSearch = embeddingClient.GenerateEmbedding(search, new() { Dimensions = dimensions });
+        var vectorSearch = embeddingSearch.Value.ToFloats().ToArray();
+        var products = await db.Product
+            .OrderBy(p => EF.Functions.VectorDistance("cosine", p.Embedding, vectorSearch))
+            .Take(3)
+            .ToListAsync();
+    
+        var response = new SearchResponse
+        {
+            Products = products,
+            Response = products.Count > 0 ?
+                $"{products.Count} Products found for [{search}]" :
+                $"No products found for [{search}]"
+        };
+        return Results.Ok(response);
+    }
+    ```
 
 These components work together to enable semantic search over product data using SQL Server 2025's vector capabilities.
 
