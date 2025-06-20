@@ -32,7 +32,7 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 
   ```mermaid
   flowchart TD
-      subgraph Azure Container Apps Environment (.NET Aspire)
+      subgraph Azure_Container_Apps_Environment_.NET_Aspire
           store[store service]
           products[products service]
           sql[SQL service]
@@ -43,8 +43,8 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
       ContainerRegistry[Container Registry]
       StorageAccount[Storage Account]
       ManagedIdentity[Managed Identity]
-      OpenAI[Azure OpenAI\n(Chat + Embeddings)]
-      AISearch[Azure AI Search\n(Vector Index)]
+      OpenAI[Azure OpenAI\nChat + Embeddings]
+      AISearch[Azure AI Search\nVector Index]
       LogAnalytics[Log Analytics]
   
       ContainerRegistry --> ManagedIdentity
@@ -57,6 +57,7 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
   
       store --> LogAnalytics
       products --> LogAnalytics
+  
   ```
 
 ## Getting Started
