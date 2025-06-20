@@ -1,6 +1,4 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
-[![Twitter: elbruno](https://img.shields.io/twitter/follow/elbruno.svg?style=social)](https://twitter.com/elbruno)
-![GitHub: elbruno](https://img.shields.io/github/followers/elbruno?style=social)
 
 ## Description
 
@@ -224,4 +222,4 @@ You may want to consider additional security measures, such as:
 
 ### Video Recordings
 
-[![Run eShopLite Semantic Search in Minutes with .NET Aspire & GitHub Codespaces 🚀](./images/90ytrunfromcodespaces.png)](https://youtu.be/T9HwjVIDPAE)
+[![Run eShopLite Semantic Search in Minutes with .NET Aspire & GitHub Codespaces 🚀](./images/Screenshot_28-4-2025_15341_portal.azure.com.jpeg)](https://youtu.be/T9HwjVIDPAE)
