@@ -32,7 +32,7 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 
   ```mermaid
   flowchart TD
-      subgraph Azure_Container_Apps_Environment_.NET_Aspire
+      subgraph "Azure Container Apps Environment - .NET Aspire"
           store[store service]
           products[products service]
           sql[SQL service]
