@@ -30,7 +30,34 @@ This is the eShopLite Aplication running, performing a **Semantic Search**:
 
 ## Architecture diagram
 
-![Architecture diagram](./images/30Diagram.png)
+    ```mermaid
+    flowchart TD
+        subgraph Azure Container Apps Environment (.NET Aspire)
+            store[store service]
+            products[products service]
+            sql[SQL service]
+            store --> products
+            products --> sql
+        end
+    
+        ContainerRegistry[Container Registry]
+        StorageAccount[Storage Account]
+        ManagedIdentity[Managed Identity]
+        OpenAI[Azure OpenAI\n(Chat + Embeddings)]
+        AISearch[Azure AI Search\n(Vector Index)]
+        LogAnalytics[Log Analytics]
+    
+        ContainerRegistry --> ManagedIdentity
+        ManagedIdentity --> OpenAI
+        ManagedIdentity --> AISearch
+    
+        products --> ManagedIdentity
+        products -->|semantic search| AISearch
+        products -->|generate embeddings + chat| OpenAI
+    
+        store --> LogAnalytics
+        products --> LogAnalytics
+    ```
 
 ## Getting Started
 
