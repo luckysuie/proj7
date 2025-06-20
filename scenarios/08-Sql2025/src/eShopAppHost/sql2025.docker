@@ -1,0 +1,12 @@
+﻿# Use the official SQL Server 2025 CTP 2.1 image for Ubuntu 22.04
+FROM mcr.microsoft.com/mssql/server:2025-CTP2.1-ubuntu-22.04
+
+# Set environment variables for SQL Server authentication
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Password123
+
+# Expose SQL Server port	
+EXPOSE 1433
+
+# Start SQL Server
+CMD ["/opt/mssql/bin/sqlservr"]
