@@ -72,7 +72,7 @@ public static class ProductEndpoints
             .WithName("SearchAllProducts")
             .Produces<List<Product>>(StatusCodes.Status200OK);
 
-        routes.MapGet("/api/aisearch/{search}", ProductAiActions.AISearch)
+        routes.MapGet("/api/aisearch/{search}", ProductApiActions.AISearch)
             .WithName("AISearch")
             .Produces<SearchResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);

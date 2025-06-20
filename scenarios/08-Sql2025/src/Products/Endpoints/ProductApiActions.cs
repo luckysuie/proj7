@@ -1,9 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using DataEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using OpenAI.Embeddings;
+using Products.Models;
 using Products.Models;
 using SearchEntities;
-using Microsoft.AspNetCore.Http;
-using Products.Models;
 
 namespace Products.Endpoints;
 
@@ -55,11 +56,35 @@ public static class ProductApiActions
             .Where(p => EF.Functions.Like(p.Name, $"%{search}%"))
             .ToListAsync();
 
-        var response = new SearchResponse();
-        response.Products = products;
-        response.Response = products.Count > 0 ?
-            $"{products.Count} Products found for [{search}]" :
-            $"No products found for [{search}]";
+        var response = new SearchResponse
+        {
+            Products = products,
+            Response = products.Count > 0 ?
+                $"{products.Count} Products found for [{search}]" :
+                $"No products found for [{search}]"
+        };
         return Results.Ok(response);
+    }
+
+    public static async Task<IResult> AISearch(string search, Context db, EmbeddingClient embeddingClient, int dimensions = 1536)
+    {
+        Console.WriteLine("Querying for similar products...");
+
+        var embeddingSearch = embeddingClient.GenerateEmbedding(search, new() { Dimensions = dimensions });
+        var vectorSearch = embeddingSearch.Value.ToFloats().ToArray();
+        var products = await db.Product
+            .OrderBy(p => EF.Functions.VectorDistance("cosine", p.Embedding, vectorSearch))
+            .Take(3)
+            .ToListAsync();
+
+        var response = new SearchResponse
+        {
+            Products = products,
+            Response = products.Count > 0 ?
+                $"{products.Count} Products found for [{search}]" :
+                $"No products found for [{search}]"
+        };
+        return Results.Ok(response);
+
     }
 }
