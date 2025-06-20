@@ -13,7 +13,7 @@ public static class ProductAiActions
         var relatedProducts = await db.Product
                 .Where(p => p.Id > 0)
                 .OrderBy(p => EF.Functions.VectorDistance("cosine", p.Embedding, vector))
-                .Select(p => new { p.Name, Distance = EF.Functions.VectorDistance("cosine", p.Embedding, vector) })
+                .Select(p => p)
                 .Take(3)
                 .ToListAsync();
 
