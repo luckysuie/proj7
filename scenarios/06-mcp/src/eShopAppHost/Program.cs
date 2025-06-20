@@ -29,6 +29,7 @@ var eshopmcpserver = builder.AddProject<Projects.eShopMcpSseServer>("eshopmcpser
     .WaitFor(parkinformationagent)
     .WithExternalHttpEndpoints();
 
+
 var store = builder.AddProject<Projects.Store>("store")
     .WithReference(eshopmcpserver)
     .WaitFor(eshopmcpserver)
