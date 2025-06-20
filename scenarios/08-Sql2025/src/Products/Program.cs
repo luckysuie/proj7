@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
@@ -13,8 +14,17 @@ Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT", "fal
 builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 
-// Add DbContext service
-builder.AddSqlServerDbContext<Context>("productsDb");
+// Context:
+// Aspire standard add DbContext service, does not support configuration for vector search
+// builder.AddSqlServerDbContext<Context>("productsDb");
+
+// Workaround:
+// Get the connection string from configuration, init DbContext and enable vector search
+var productsDbConnectionString = builder.Configuration.GetConnectionString("productsDb");
+builder.Services.AddDbContext<Context>(options =>
+    options.UseSqlServer(productsDbConnectionString, o => o.UseVectorSearch()));
+
+
 
 // in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
