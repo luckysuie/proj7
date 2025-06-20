@@ -1,11 +1,5 @@
 ﻿using SearchEntities;
 using DataEntities;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using Products.Memory;
-using Products.Models;
-using OpenAI.Embeddings;
-using OpenAI.Chat;
 
 namespace Products.Endpoints;
 

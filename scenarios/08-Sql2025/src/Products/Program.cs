@@ -2,7 +2,6 @@ using OpenAI;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
 using Products.Endpoints;
-using Products.Memory;
 using Products.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,14 +61,6 @@ builder.Services.AddSingleton<EmbeddingClient>(serviceProvider =>
 builder.Services.AddSingleton<IConfiguration>(sp =>
 {
     return builder.Configuration;
-});
-
-// add memory context
-builder.Services.AddSingleton(sp =>
-{
-    var logger = sp.GetService<ILogger<Program>>();
-    logger.LogInformation("Creating memory context");
-    return new MemoryContext(logger, sp.GetService<ChatClient>(), sp.GetService<EmbeddingClient>());
 });
 
 // Add services to the container.
