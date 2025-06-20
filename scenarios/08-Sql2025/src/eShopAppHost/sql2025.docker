@@ -1,5 +1,5 @@
-﻿# Use the official SQL Server 2025 CTP 2.1 image for Ubuntu 22.04
-FROM mcr.microsoft.com/mssql/server:2025-CTP2.1-ubuntu-22.04
+﻿# Use the official SQL Server 2025 Preview image
+FROM mcr.microsoft.com/mssql/server:2025-latest
 
 # Set environment variables for SQL Server authentication
 ENV ACCEPT_EULA=Y
