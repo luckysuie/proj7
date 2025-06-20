@@ -19,7 +19,7 @@ builder.AddSqlServerDbContext<Context>("productsDb");
 // in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
 var chatDeploymentName = "gpt-4.1-mini";
-var embeddingsDeploymentName = "text-embedding-ada-002";
+var embeddingsDeploymentName = "text-embedding-3-small";
 builder.AddAzureOpenAIClient(azureOpenAiClientName);
 
 // get azure openai client and create Chat client from aspire hosting configuration

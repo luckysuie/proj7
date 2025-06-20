@@ -38,8 +38,8 @@ if (builder.ExecutionContext.IsPublishMode)
     gpt41mini.Resource.SkuName = "GlobalStandard";
 
     var embeddingsDeployment = aoai.AddDeployment(name: embeddingsDeploymentName,
-        modelName: "text-embedding-ada-002",
-        modelVersion: "2");
+        modelName: "text-embedding-3-small",
+        modelVersion: "1");
 
 
     products.WithReference(appInsights)

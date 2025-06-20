@@ -29,7 +29,7 @@ public class Product
     public virtual string ImageUrl { get; set; }
 
     // demo for SQL Server 2025 new vector type
-    public float[] Embedding { get; set; } = Array.Empty<float>();
+    public float[] Embedding { get; set; } = [];
 }
 
 

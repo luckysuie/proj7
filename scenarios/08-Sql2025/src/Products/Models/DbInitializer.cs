@@ -1,12 +1,13 @@
 ﻿using DataEntities;
 using Microsoft.Extensions.AI;
 using OpenAI.Embeddings;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Products.Models
 {
     public static class DbInitializer
     {
-        public static void Initialize(Context context, EmbeddingClient embeddingClient)
+        public static void Initialize(Context context, EmbeddingClient embeddingClient, int dimensions = 1536)
         {
             if (context.Product.Any())
                 return;
@@ -27,8 +28,9 @@ namespace Products.Models
             // add embeddings
             foreach (var product in products)
             {
-                var embedding = embeddingClient.GenerateEmbedding($"Name = {product.Name} - Description = {product.Description} - Price = {product.Price}");
-                product.Embedding = embedding.Value.ToFloats().ToArray();
+                var productInformation = $"Name = {product.Name} - Description = {product.Description} - Price = {product.Price}";
+                var productInformationEmbedding = embeddingClient.GenerateEmbedding(productInformation, new() { Dimensions = dimensions });
+                product.Embedding = productInformationEmbedding.Value.ToFloats().ToArray();
             }
 
             // add products to context
