@@ -11,11 +11,6 @@
 - [Getting started](#getting-started)
 - [Deploying to Azure](#deploying)
 - Run solution
-  - [Run locally](#run-locally)
-  - [Run the solution](#run-the-solution)
-  - [.NET Aspire Azure Resources creation](#net-aspire-azure-resources-creation)
-  - [Local dev using an existing model](#local-development-using-an-existing-gpt-41-mini-and-ada-002-model)
-  - [Telemetry with .NET Aspire and Azure Application Insights](#telemetry-with-net-aspire-and-azure-application-insights)
 - [Resources](#resources)
 - [Video Recordings](#video-recordings)
 - [Guidance](#guidance)
@@ -95,7 +90,7 @@ public static async Task<IResult> AISearch(string search, Context db, EmbeddingC
 
 These components work together to enable semantic search over product data using SQL Server 2025's vector capabilities.
 
-The solution is in the `./src` folder, the main solution is **[eShopLite-Sql2025.sln](./src/eShopLite-Aspire.sln)**.
+The solution is in the `./src` folder, the main solution is **[eShopLite-Sql2025.sln](./src/eShopLite-Sql2025.sln)**.
 
 ## Deploying
 
