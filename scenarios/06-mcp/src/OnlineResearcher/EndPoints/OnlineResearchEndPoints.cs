@@ -98,8 +98,7 @@ public static class OnlineResearchEndPoints
             || runResponse.Value.Status == Azure.AI.Agents.Persistent.RunStatus.InProgress);
 
         string searchResult = "";
-        logger.LogInformation("==========================");
-        var sanitizedQuery = query.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+        logger.LogInformation("==========================");        
         logger.LogInformation($"Search for '{sanitizedQuery}'");
 
         AsyncPageable<PersistentThreadMessage> messages = persistentClient.Messages.GetMessagesAsync(

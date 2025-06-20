@@ -1,7 +1,0 @@
-{
-  "servers": {
-    "eshopazure": {
-      "url": "https://eshopmcpserver.yellowcliff-c82c3da3.eastus2.azurecontainerapps.io/sse"
-    }
-  }
-} 
