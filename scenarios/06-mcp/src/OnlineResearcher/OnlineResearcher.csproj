@@ -8,16 +8,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.AI.Agents.Persistent" Version="1.1.0-beta.1" />
+		<PackageReference Include="Azure.AI.Agents.Persistent" Version="1.1.0-beta.2" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
 		<!--Perform Search Online using Azure AI Agent Service-->
 		<PackageReference Include="Azure.AI.Projects" Version="1.0.0-beta.9" />
 		<PackageReference Include="Azure.Identity" Version="1.14.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.5" />
-		<PackageReference Include="Microsoft.SemanticKernel.Agents.Abstractions" Version="1.54.0" />
-		<PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.54.0" />
-		<PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.54.0-preview" />
-		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.54.0" />
+		<PackageReference Include="Microsoft.SemanticKernel.Agents.Abstractions" Version="1.57.0" />
+		<PackageReference Include="Microsoft.SemanticKernel.Agents.Core" Version="1.57.0" />
+		<PackageReference Include="Microsoft.SemanticKernel.Agents.OpenAI" Version="1.57.0-preview" />
+		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.57.0" />
 		<PackageReference Include="System.Text.Json" Version="9.0.5" />
 	</ItemGroup>
 
