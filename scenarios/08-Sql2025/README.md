@@ -20,13 +20,13 @@
 
 **GitHub CodeSpaces:** This project is designed to be opened in GitHub Codespaces as an easy way for anyone to deploy the solution entirely in the browser.
 
-This is the eShopLite Aplication running, performing a **Keyword Search**:
+This is the eShopLite Application running, performing a **Keyword Search**:
 
-![eShopLite Aplication running doing search using keyworkd search](./images/05eShopLite-SearchKeyWord.gif)
+![eShopLite Application running doing search using keyword search](./images/05eShopLite-SearchKeyWord.gif)
 
-This is the eShopLite Aplication running, performing a **Semantic Search**:
+This is the eShopLite Application running, performing a **Semantic Search**:
 
-![eShopLite Aplication running doing search using keyworkd search](./images/06eShopLite-SearchSemantic.gif)
+![eShopLite Application running doing search using keyword search](./images/06eShopLite-SearchSemantic.gif)
 
 ## Architecture diagram
 
