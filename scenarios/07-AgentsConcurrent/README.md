@@ -160,36 +160,20 @@ Check [.NET Aspire Azure hosting integrations](https://learn.microsoft.com/dotne
 
 ### Local development using existing models
 
-In order to use existing models: gpt-4.1-mini and text-embedding-ada-002, you need to define the specific connection string in the `Products` project.
+In order to use existing models: gpt-4.1-mini and text-embedding-ada-002, you need to define the specific connection string in the `eShopAppHost` project.
 
 Add a user secret with the configuration:
 
 ```bash
-cd src/Products
+cd src/eShopAppHost
 
-dotnet user-secrets set "ConnectionStrings:openaidev" "Endpoint=https://<endpoint>.openai.azure.com/;Key=<key>;"
+dotnet user-secrets set "ConnectionStrings:openai" "Endpoint=https://<endpoint>.openai.azure.com/;Key=<key>;"
 ```
 
 This Azure OpenAI service must contain:
 
 - a `gpt-4.1-mini` model named **gpt-41-mini**
 - a `text-embedding-ada-002` model named **text-embedding-ada-002**
-
-To use these services, edit the `program.cs`, and change this:
-
-```csharp
-// in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
-var azureOpenAiClientName = "openai";
-builder.AddAzureOpenAIClient(azureOpenAiClientName);
-```
-
-to this:
-
-```csharp
-// in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
-var azureOpenAiClientName = "openaidev";
-builder.AddAzureOpenAIClient(azureOpenAiClientName);
-```
 
 ### Telemetry with .NET Aspire and Azure Application Insights
 

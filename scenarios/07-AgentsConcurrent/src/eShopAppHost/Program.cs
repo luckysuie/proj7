@@ -23,6 +23,8 @@ var store = builder.AddProject<Projects.Store>("store")
     .WaitFor(insights)
     .WithExternalHttpEndpoints();
 
+IResourceBuilder<IResourceWithConnectionString>? openai;
+
 if (builder.ExecutionContext.IsPublishMode)
 {
     // production code uses Azure services, so we need to add them here
@@ -48,7 +50,19 @@ if (builder.ExecutionContext.IsPublishMode)
 
     store.WithReference(appInsights)
         .WithExternalHttpEndpoints();
+
+    openai = aoai;
 }
+else
+{
+    openai = builder.AddConnectionString("openai");
+}
+
+insights.WithReference(openai)
+    .WithEnvironment("AI_ChatDeploymentName", "gpt-4.1-mini");
+
+products.WithReference(openai)
+    .WithEnvironment("AI_embeddingsDeploymentName", "text-embedding-ada-002");
 
 builder.Build().Run();
 
