@@ -132,7 +132,7 @@ This scenario demonstrates how to use [SQL Server 2025's Vector search and Vecto
 
 These components work together to enable semantic search over product data using SQL Server 2025's vector capabilities.
 
-The solution is in the `./src` folder, the main solution is **[eShopLite-Sql2025.sln](./src/eShopLite-Sql2025.sln)**.
+The solution is in the `./src` folder, the main solution is **[eShopLite-Sql2025.slnx](./src/eShopLite-Sql2025.slnx)**.
 
 ## Deploying
 
