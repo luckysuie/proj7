@@ -4,9 +4,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 // images from https://hub.docker.com/r/microsoft/mssql-server/
 
-var password = builder.AddParameter("password", "Password123", secret: true);
-
-var sql = builder.AddSqlServer("sql", password)
+var sql = builder.AddSqlServer("sql")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithImageTag("2025-latest")
     .WithEnvironment("ACCEPT_EULA", "Y");
