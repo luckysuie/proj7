@@ -66,22 +66,7 @@ This is the eShopLite Application running, performing a **Semantic Search**:
 
 This scenario demonstrates how to use [SQL Server 2025's Vector search and Vector index features](https://learn.microsoft.com/en-us/sql/relational-databases/vectors/vectors-sql-server?view=sql-server-ver17) in a .NET Aspire application. The main concepts and implementation details are:
 
-- The .NET Aspire AppHost project creates the SQL Server 2025 instance using a custom Dockerfile: [`scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker`](scenarios/08-Sql2025/src/eShopAppHost/sql2025.docker). This file uses an image from the Docker repository for SQL Server 2025: [Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/r/microsoft/mssql-server/).
-
-    ```dockerfile
-    # Use the official SQL Server 2025 Preview image
-    FROM mcr.microsoft.com/mssql/server:2025-latest
-    
-    # Set environment variables for SQL Server authentication
-    ENV ACCEPT_EULA=Y
-    ENV SA_PASSWORD=< sa password >
-    
-    # Expose SQL Server port	
-    EXPOSE 1433
-    
-    # Start SQL Server
-    CMD ["/opt/mssql/bin/sqlservr"]
-    ```
+- The .NET Aspire AppHost project creates the SQL Server 2025 instance directly using the container image `mcr.microsoft.com/mssql/server:2025-latest` from the Docker repository for SQL Server 2025: [Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/r/microsoft/mssql-server/).
 
 - The logic for initializing and running the SQL Server container is implemented in [`scenarios/08-Sql2025/src/eShopAppHost/Program.cs`](scenarios/08-Sql2025/src/eShopAppHost/Program.cs):
 
@@ -92,7 +77,8 @@ This scenario demonstrates how to use [SQL Server 2025's Vector search and Vecto
     
     var sql = builder.AddSqlServer("sql", password)
         .WithLifetime(ContainerLifetime.Persistent)
-        .WithDockerfile(@".\", "sql2025.docker");
+        .WithImage("mcr.microsoft.com/mssql/server:2025-latest")
+        .WithEnvironment("ACCEPT_EULA", "Y");
     
     var productsDb = sql
         .WithDataVolume()

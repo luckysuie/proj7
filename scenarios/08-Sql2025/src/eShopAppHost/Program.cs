@@ -8,7 +8,8 @@ var password = builder.AddParameter("password", "Password123", secret: true);
 
 var sql = builder.AddSqlServer("sql", password)
     .WithLifetime(ContainerLifetime.Persistent)
-    .WithDockerfile(@".\", "sql2025.docker");
+    .WithImage("mcr.microsoft.com/mssql/server:2025-latest")
+    .WithEnvironment("ACCEPT_EULA", "Y");
 
 var productsDb = sql
     .WithDataVolume()
