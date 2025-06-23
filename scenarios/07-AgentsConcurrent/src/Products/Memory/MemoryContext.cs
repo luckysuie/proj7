@@ -1,61 +1,51 @@
 ﻿using DataEntities;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.VectorData;
 using Microsoft.SemanticKernel.Connectors.InMemory;
 using Newtonsoft.Json;
-using OpenAI.Chat;
-using OpenAI.Embeddings;
 using Products.Models;
 using SearchEntities;
 using System.Text;
 using VectorEntities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Products.Memory;
 
-public class MemoryContext
+public class MemoryContext(ILogger<MemoryContext> logger, IChatClient chatClient, IEmbeddingGenerator<string, Embedding<float>> embeddingClient)
 {
-    private ILogger _logger;
-    public ChatClient? _chatClient;
-    public EmbeddingClient? _embeddingClient;
-    public VectorStoreCollection<int, ProductVector> _productsCollection;
-    private string _systemPrompt = "";
+    private VectorStoreCollection<int, ProductVector>? _productsCollection;
+    private const string _systemPrompt = """
+        You are a useful assistant.
+        You always reply with a short and funny message.
+        If you do not know an answer, you say 'I don't know that'.
+        
+        You only answer questions related to outdoor camping products.
+        For any other type of questions, explain to the user that you only answer outdoor camping products questions.
+        
+        Do not store memory of the chat conversation.
+        """;
+        
     private bool _isMemoryCollectionInitialized = false;
-
-    public MemoryContext(ILogger logger, ChatClient? chatClient, EmbeddingClient? embeddingClient)
-    {
-        _logger = logger;
-        _chatClient = chatClient;
-        _embeddingClient = embeddingClient;
-
-        _logger.LogInformation("Memory context created");
-        _logger.LogInformation($"Chat Client is null: {_chatClient is null}");
-        _logger.LogInformation($"Embedding Client is null: {_embeddingClient is null}");
-    }
 
     public async Task<bool> InitMemoryContextAsync(Context db)
     {
-        _logger.LogInformation("Initializing memory context");
+        logger.LogInformation("Initializing memory context");
         var vectorProductStore = new InMemoryVectorStore();
         _productsCollection = vectorProductStore.GetCollection<int, ProductVector>("products");
         await _productsCollection.EnsureCollectionExistsAsync();
 
-        // define system prompt
-        _systemPrompt = "You are a useful assistant. You always reply with a short and funny message. If you do not know an answer, you say 'I don't know that.' You only answer questions related to outdoor camping products. For any other type of questions, explain to the user that you only answer outdoor camping products questions. Do not store memory of the chat conversation.";
-
-        _logger.LogInformation("Get a copy of the list of products");
+        logger.LogInformation("Get a copy of the list of products");
         // get a copy of the list of products
         var products = await db.Product.ToListAsync();
 
-        _logger.LogInformation("Filling products in memory");
+        logger.LogInformation("Filling products in memory");
 
         // iterate over the products and add them to the memory
         foreach (var product in products)
         {
             try
             {
-                _logger.LogInformation("Adding product to memory: {Product}", product.Name);
+                logger.LogInformation("Adding product to memory: {Product}", product.Name);
                 var productInfo = $"[{product.Name}] is a product that costs [{product.Price}] and is described as [{product.Description}]";
 
                 // new product vector
@@ -67,19 +57,19 @@ public class MemoryContext
                     Price = product.Price,
                     ImageUrl = product.ImageUrl
                 };
-                var result = await _embeddingClient.GenerateEmbeddingAsync(productInfo);
+                var result = await embeddingClient.GenerateAsync(productInfo);
 
-                productVector.Vector = result.Value.ToFloats();
+                productVector.Vector = result.Vector;
                 await _productsCollection.UpsertAsync(productVector);
-                _logger.LogInformation("Product added to memory: {Product}", product.Name);
+                logger.LogInformation("Product added to memory: {Product}", product.Name);
             }
             catch (Exception exc)
             {
-                _logger.LogError(exc, "Error adding product to memory");
+                logger.LogError(exc, "Error adding product to memory");
             }
         }
 
-        _logger.LogInformation("DONE! Filling products in memory");
+        logger.LogInformation("DONE! Filling products in memory");
         return true;
     }
 
@@ -98,8 +88,8 @@ public class MemoryContext
 
         try
         {
-            var result = await _embeddingClient.GenerateEmbeddingAsync(search);
-            var vectorSearchQuery = result.Value.ToFloats();
+            var result = await embeddingClient.GenerateAsync(search);
+            var vectorSearchQuery = result.Vector;
 
             // search the vector database for the most similar product        
             var sbFoundProducts = new StringBuilder();
@@ -123,30 +113,32 @@ public class MemoryContext
             }
 
             // let's improve the response message
-            var prompt = @$"You are an intelligent assistant helping clients with their search about outdoor products. 
-Generate a catchy and friendly message using the information below.
-Add a comparison between the products found and the search criteria.
-Include products details.
-    - User Question: {search}
-    - Found Products: 
-{sbFoundProducts}";
+            var prompt = $"""
+                You are an intelligent assistant helping clients with their search about outdoor products. 
+                Generate a catchy and friendly message using the information below.
+                Add a comparison between the products found and the search criteria.
+                Include products details.
+                    - User Question: {search}
+                    - Found Products: 
+                {sbFoundProducts}
+                """;
 
             var messages = new List<ChatMessage>
-    {
-        new SystemChatMessage(_systemPrompt),
-        new UserChatMessage(prompt)
-    };
+            {
+                new(ChatRole.System, _systemPrompt),
+                new(ChatRole.User, prompt)
+            };
 
-            _logger.LogInformation("{ChatHistory}", JsonConvert.SerializeObject(messages));
+            logger.LogInformation("{ChatHistory}", JsonConvert.SerializeObject(messages));
 
-            var resultPrompt = await _chatClient.CompleteChatAsync(messages);
-            response.Response = resultPrompt.Value.Content[0].Text!;
+            var resultPrompt = await chatClient.GetResponseAsync(messages);
+            response.Response = resultPrompt.Messages[0].Text;
 
         }
         catch (Exception ex)
         {
             response.Response = $"An error occurred: {ex.Message}";
-            _logger.LogError(ex, "Error during search");
+            logger.LogError(ex, "Error during search");
         }
         return response;
     }

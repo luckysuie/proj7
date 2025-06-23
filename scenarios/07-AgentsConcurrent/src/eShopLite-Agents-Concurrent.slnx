@@ -13,4 +13,7 @@
     <Project Path="SearchEntities/SearchEntities.csproj" />
     <Project Path="VectorEntities/VectorEntities.csproj" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../README.md" />
+  </Folder>
 </Solution>

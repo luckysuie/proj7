@@ -1,6 +1,5 @@
 ﻿using DataEntities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Insights.Models;
 
