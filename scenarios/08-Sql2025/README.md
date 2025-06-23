@@ -77,7 +77,7 @@ This scenario demonstrates how to use [SQL Server 2025's Vector search and Vecto
     
     var sql = builder.AddSqlServer("sql", password)
         .WithLifetime(ContainerLifetime.Persistent)
-        .WithImage("mcr.microsoft.com/mssql/server:2025-latest")
+        .WithImageTag("2025-latest")
         .WithEnvironment("ACCEPT_EULA", "Y");
     
     var productsDb = sql
