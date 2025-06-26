@@ -8,7 +8,7 @@ namespace Products.Tests
     [TestClass]
     public sealed class ProductApiActionsTests
     {
-        private DbContextOptions<Context> _dbOptions;
+        private DbContextOptions<Context> _dbOptions = null!;
 
         [TestInitialize]
         public void TestInit()
@@ -113,10 +113,27 @@ namespace Products.Tests
             }
             using (var context = new Context(_dbOptions))
             {
-                await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
+                // NOTE: ExecuteDeleteAsync is not supported by the in-memory database provider
+                // This test verifies the method throws the expected exception with in-memory DB
+                // In real SQL Server environments, this method would work correctly
+                
+                // Test deletion of existing product throws expected exception due to in-memory DB limitation
+                var exception = await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
                 {
                     await ProductApiActions.DeleteProduct(40, context);
                 });
+                
+                Assert.IsTrue(exception.Message.Contains("ExecuteDelete"),
+                    "Exception should be related to ExecuteDelete not being supported");
+                
+                // Test deletion of non-existent product also throws same exception
+                var notFoundException = await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () =>
+                {
+                    await ProductApiActions.DeleteProduct(999, context);
+                });
+                
+                Assert.IsTrue(notFoundException.Message.Contains("ExecuteDelete"),
+                    "Exception should be related to ExecuteDelete not being supported");
             }
         }
 
@@ -146,6 +163,19 @@ namespace Products.Tests
                 Assert.IsNotNull(okNoResult);
                 Assert.AreEqual(0, okNoResult.Value.Products.Count);
                 Assert.IsTrue(okNoResult.Value.Response.Contains("No products found"));
+            }
+        }
+
+        [TestMethod]
+        public async Task AISearch_WithNullEmbeddingClient_ThrowsException()
+        {
+            // Arrange & Act & Assert - Test the method signature and basic error handling
+            using (var context = new Context(_dbOptions))
+            {
+                await Assert.ThrowsExceptionAsync<NullReferenceException>(async () =>
+                {
+                    await ProductApiActions.AISearch("test search", context, null!);
+                });
             }
         }
     }
