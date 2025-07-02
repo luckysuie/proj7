@@ -1,0 +1,89 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.36.1.42791",
+      "templateHash": "12632646110504402045"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location for the resource(s) to be deployed."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "apiVersion": "2024-10-01",
+      "name": "[take(format('openai-{0}', uniqueString(resourceGroup().id)), 64)]",
+      "location": "[parameters('location')]",
+      "kind": "OpenAI",
+      "properties": {
+        "customSubDomainName": "[toLower(take(concat('openai', uniqueString(resourceGroup().id)), 24))]",
+        "publicNetworkAccess": "Enabled",
+        "disableLocalAuth": true
+      },
+      "sku": {
+        "name": "S0"
+      },
+      "tags": {
+        "aspire-resource-name": "openai"
+      }
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "apiVersion": "2024-10-01",
+      "name": "[format('{0}/{1}', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64), 'gpt-41-mini')]",
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "gpt-4.1-mini",
+          "version": "2025-04-14"
+        }
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 10
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64))]"
+      ]
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts/deployments",
+      "apiVersion": "2024-10-01",
+      "name": "[format('{0}/{1}', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64), 'text-embedding-ada-002')]",
+      "properties": {
+        "model": {
+          "format": "OpenAI",
+          "name": "text-embedding-ada-002",
+          "version": "2"
+        }
+      },
+      "sku": {
+        "name": "Standard",
+        "capacity": 8
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts/deployments', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64), 'gpt-41-mini')]",
+        "[resourceId('Microsoft.CognitiveServices/accounts', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "connectionString": {
+      "type": "string",
+      "value": "[format('Endpoint={0}', reference(resourceId('Microsoft.CognitiveServices/accounts', take(format('openai-{0}', uniqueString(resourceGroup().id)), 64)), '2024-10-01').endpoint)]"
+    },
+    "name": {
+      "type": "string",
+      "value": "[take(format('openai-{0}', uniqueString(resourceGroup().id)), 64)]"
+    }
+  }
+}
