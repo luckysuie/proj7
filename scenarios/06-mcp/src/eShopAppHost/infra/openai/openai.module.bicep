@@ -5,6 +5,9 @@ resource openai 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   name: take('openai-${uniqueString(resourceGroup().id)}', 64)
   location: location
   kind: 'OpenAI'
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     customSubDomainName: toLower(take(concat('openai', uniqueString(resourceGroup().id)), 24))
     publicNetworkAccess: 'Enabled'

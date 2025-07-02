@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Bicep generated JSON files
+*.bicep.json
+**/*.module.json
+main.json
