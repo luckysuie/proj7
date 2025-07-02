@@ -125,7 +125,7 @@ The Azure Resource Group with all the deployed services:
 
 ## Resources
 
-- [Generative AI for Beginners .NET](https://aka.ms/genainnet)
+- [Generative AI for Beginners .NET](https://aka.ms/genainet)
 
 - [.NET Aspire Documentation](https://learn.microsoft.com/dotnet/aspire/)
 
