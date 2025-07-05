@@ -1,0 +1,47 @@
+@using CartEntities
+@using Store.Services
+@inject ICartService CartService
+@inject IJSRuntime JSRuntime
+
+<button class="btn btn-primary btn-sm" @onclick="AddToCart" disabled="@isLoading">
+    @if (isLoading)
+    {
+        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+    }
+    else
+    {
+        <i class="bi bi-cart-plus me-1"></i>
+    }
+    Add to Cart
+</button>
+
+@code {
+    [Parameter] public int ProductId { get; set; }
+    [Parameter] public EventCallback OnCartUpdated { get; set; }
+    
+    private bool isLoading = false;
+
+    private async Task AddToCart()
+    {
+        if (isLoading) return;
+        
+        isLoading = true;
+        try
+        {
+            await CartService.AddToCartAsync(ProductId);
+            await OnCartUpdated.InvokeAsync();
+            
+            // Show success feedback
+            await JSRuntime.InvokeVoidAsync("showToast", "Product added to cart!");
+        }
+        catch (Exception)
+        {
+            // Show error feedback
+            await JSRuntime.InvokeVoidAsync("showToast", "Error adding product to cart.", "error");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
