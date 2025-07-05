@@ -38,7 +38,7 @@ else
                     <td>@product.Description</td>
                     <td>@product.Price.ToString("C")</td>
                     <td>
-                        <AddToCartButton ProductId="@product.Id" OnCartUpdated="OnCartUpdated" />
+                        <AddToCartButton ProductId="@product.Id" ProductName="@product.Name" OnCartUpdated="OnCartUpdated" />
                     </td>
                 </tr>
             }

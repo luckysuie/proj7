@@ -5,6 +5,7 @@
 @inject ICartService CartService
 @inject NavigationManager Navigation
 @attribute [StreamRendering(true)]
+@rendermode InteractiveServer
 
 <PageTitle>Shopping Cart</PageTitle>
 
@@ -112,7 +113,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        // Initial load - this will be empty during server-side rendering
         await LoadCart();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Reload cart after client-side rendering is available
+            await LoadCart();
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task LoadCart()
