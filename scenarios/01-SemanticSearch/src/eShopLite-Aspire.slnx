@@ -15,4 +15,5 @@
   <Folder Name="/4 Tests/">
     <Project Path="Products.Tests/Products.Tests.csproj" />
   </Folder>
+  <Project Path="CartEntities/CartEntities.csproj" />
 </Solution>
