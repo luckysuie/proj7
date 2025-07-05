@@ -2,8 +2,9 @@
 @using Store.Services
 @inject ICartService CartService
 @inject IJSRuntime JSRuntime
+@rendermode InteractiveServer
 
-<button class="btn btn-primary btn-sm" @onclick="AddToCart" disabled="@isLoading">
+<button class="btn btn-primary btn-sm" @onclick="AddToCart" disabled="@(isLoading || !isClientRendered)">
     @if (isLoading)
     {
         <span class="spinner-border spinner-border-sm me-1" role="status"></span>
@@ -20,10 +21,21 @@
     [Parameter] public EventCallback OnCartUpdated { get; set; }
     
     private bool isLoading = false;
+    private bool isClientRendered = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isClientRendered = true;
+            StateHasChanged();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     private async Task AddToCart()
     {
-        if (isLoading) return;
+        if (isLoading || !isClientRendered) return;
         
         isLoading = true;
         try

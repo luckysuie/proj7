@@ -2,6 +2,7 @@
 @using Store.Services
 @inject ICartService CartService
 @inject NavigationManager Navigation
+@rendermode InteractiveServer
 
 <!-- Offcanvas Cart -->
 <div class="offcanvas offcanvas-end @(isVisible ? "show" : "")" tabindex="-1" id="cartOffcanvas" style="visibility: @(isVisible ? "visible" : "hidden");">
@@ -69,15 +70,21 @@
 
     private Cart cart = new();
     private bool isVisible => IsVisible;
+    private bool isClientRendered = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await LoadCart();
+        if (firstRender)
+        {
+            isClientRendered = true;
+            await LoadCart();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (IsVisible)
+        if (IsVisible && isClientRendered)
         {
             await LoadCart();
         }
@@ -85,6 +92,8 @@
 
     private async Task LoadCart()
     {
+        if (!isClientRendered) return;
+        
         try
         {
             cart = await CartService.GetCartAsync();

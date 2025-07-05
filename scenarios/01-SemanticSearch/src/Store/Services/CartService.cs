@@ -31,6 +31,13 @@ public class CartService : ICartService
                 return cart ?? new Cart();
             }
         }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("JavaScript interop calls cannot be issued at this time"))
+        {
+            // During server-side rendering, JavaScript interop is not available
+            // Return an empty cart - this will be populated when the component renders on the client
+            _logger.LogDebug("JavaScript interop not available during server-side rendering, returning empty cart");
+            return new Cart();
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving cart from session storage");
@@ -132,6 +139,11 @@ public class CartService : ICartService
         {
             await _sessionStorage.DeleteAsync(CartSessionKey);
         }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("JavaScript interop calls cannot be issued at this time"))
+        {
+            // During server-side rendering, JavaScript interop is not available
+            _logger.LogDebug("JavaScript interop not available during server-side rendering, cart not cleared");
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error clearing cart");
@@ -144,6 +156,12 @@ public class CartService : ICartService
         {
             var cart = await GetCartAsync();
             return cart.ItemCount;
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("JavaScript interop calls cannot be issued at this time"))
+        {
+            // During server-side rendering, return 0
+            _logger.LogDebug("JavaScript interop not available during server-side rendering, returning 0 for cart count");
+            return 0;
         }
         catch (Exception ex)
         {
@@ -158,6 +176,12 @@ public class CartService : ICartService
         {
             var cartJson = JsonSerializer.Serialize(cart);
             await _sessionStorage.SetAsync(CartSessionKey, cartJson);
+        }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("JavaScript interop calls cannot be issued at this time"))
+        {
+            // During server-side rendering, JavaScript interop is not available
+            // This is expected and will be handled when the component renders on the client
+            _logger.LogDebug("JavaScript interop not available during server-side rendering, cart not saved");
         }
         catch (Exception ex)
         {
