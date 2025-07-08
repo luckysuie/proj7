@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Launch eShopLite Aspire (SemanticSearch scenario)",
+			"command": "dotnet run --project .\\scenarios\\01-SemanticSearch\\src\\eShopAppHost",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
