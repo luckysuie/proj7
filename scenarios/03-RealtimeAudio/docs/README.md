@@ -15,7 +15,27 @@ The 03-RealtimeAudio scenario extends the basic eCommerce platform with cutting-
 - [Product Context Management](./product-context-management.md) - Real-time product information retrieval
 - [Conversation Management](./conversation-management.md) - Audio session handling and state management
 
-## Architecture Components
+## Architecture
+
+```
+       ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+       │   Store (UI)    │───▶│  Products API   │───▶│   SQL Server    │
+       └─────────────────┘    └─────────────────┘    └─────────────────┘
+                                        │
+       ┌─────────────────┐              ▼
+       │ StoreRealtime   │       ┌─────────────────┐
+       │ (Audio UI)      │──────▶│ Azure OpenAI    │
+       └─────────────────┘       │ - GPT-4.1-mini  │
+                │                │ - Embeddings    │
+                │                └─────────────────┘
+                ▼
+       ┌─────────────────┐
+       │ Azure OpenAI    │
+       │ Realtime API    │
+       │ - GPT-4o-mini   │
+       │ - Audio I/O     │
+       └─────────────────┘
+```
 
 ### Core Services
 - **Products Service**: API service with semantic search and product data
@@ -56,17 +76,6 @@ The 03-RealtimeAudio scenario extends the basic eCommerce platform with cutting-
 - `AI_RealtimeDeploymentName`: "gpt-4o-mini-realtime-preview"
 - `AI_embeddingsDeploymentName`: "text-embedding-ada-002"
 
-### Service Architecture
-```
-StoreRealtime (Audio UI)
-  ├── Products (API)
-  │   ├── SQL Server Database
-  │   └── Azure OpenAI (Chat + Embeddings)
-  └── Azure OpenAI (Realtime)
-
-Store (Traditional UI)
-  └── Products (API)
-```
 
 ## Screenshots
 

@@ -15,7 +15,27 @@ The 05-deepseek scenario demonstrates a sophisticated eCommerce platform that in
 - [Memory Context with Reasoning](./memory-context-reasoning.md) - Enhanced vector search with reasoning
 - [Advanced Search Capabilities](./advanced-search-capabilities.md) - Reasoning-enhanced product discovery
 
-## Architecture Components
+## Architecture
+
+```
+       ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+       │   Store (UI)    │───▶│  Products API   │───▶│   SQL Server    │
+       └─────────────────┘    └─────────────────┘    └─────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────┐
+                              │ Azure OpenAI    │
+                              │ - GPT-4.1-mini  │
+                              │ - Embeddings    │
+                              └─────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────┐
+                              │   DeepSeek-R1   │
+                              │ - Reasoning     │
+                              │ - Analysis      │
+                              └─────────────────┘
+```
 
 ### Core Services
 - **Products Service**: Enhanced API with dual AI provider support
@@ -87,17 +107,7 @@ The DeepSeek-R1 integration enables:
 - **DeepSeek-R1**: Complex reasoning and analytical tasks
 - **Intelligent Routing**: Automatic selection of appropriate AI provider
 
-## Service Architecture
-```
-Store (Frontend)
-  └── Products (API)
-      ├── SQL Server Database
-      ├── Azure OpenAI
-      │   ├── GPT-4.1-mini (Chat)
-      │   └── text-embedding-ada-002 (Embeddings)
-      └── DeepSeek-R1
-          └── DeepSeek-R1 (Reasoning)
-```
+
 
 ## Screenshots
 

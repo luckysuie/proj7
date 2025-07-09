@@ -15,7 +15,29 @@ The 08-Sql2025 scenario demonstrates cutting-edge database capabilities by lever
 - [Modern Database Features](./modern-database-features.md) - SQL Server 2025 enhancements and capabilities
 - [Performance Optimization](./performance-optimization.md) - Vector indexing and query optimization
 
-## Architecture Components
+## Architecture
+
+```
+       ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+       │   Store (UI)    │───▶│  Products API   │───▶│ SQL Server 2025 │
+       └─────────────────┘    └─────────────────┘    │ - Native Vector │
+                                        │            │ - ACID Support  │
+                                        │            └─────────────────┘
+                                        ▼
+                                ┌─────────────────┐
+                                │ Azure OpenAI    │
+                                │ - GPT-4.1-mini  │
+                                │ - text-embed-   │
+                                │   3-small       │
+                                └─────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────────┐
+                              │ Native Vector       │
+                              │ Search & Storage    │
+                              │ (In SQL Server)     │
+                              └─────────────────────┘
+```
 
 ### Core Services
 - **Products Service**: API with native SQL vector search integration
@@ -87,18 +109,7 @@ builder.AddAzureOpenAIClient(azureOpenAiClientName, configureSettings: settings 
 - **Purpose**: Conversational product assistance
 - **Integration**: Microsoft.Extensions.AI chat client
 
-## Service Architecture
-```
-Store (Frontend)
-  └── Products (API)
-      ├── SQL Server 2025
-      │   ├── Product Data
-      │   ├── Vector Indexes
-      │   └── Native Vector Search
-      └── Azure OpenAI
-          ├── text-embedding-3-small
-          └── gpt-4.1-mini
-```
+
 
 ## Screenshots
 

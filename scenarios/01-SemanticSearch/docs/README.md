@@ -15,7 +15,27 @@ The 01-SemanticSearch scenario demonstrates a comprehensive eCommerce platform w
 - [SQL Server Database](./sql-server-database.md) - Entity Framework and data modeling
 - [Product API Endpoints](./product-api-endpoints.md) - REST API for product operations
 
-## Architecture Components
+## Architecture
+
+```
+       ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+       │   Store (UI)    │───▶│  Products API   │───▶│   SQL Server    │
+       └─────────────────┘    └─────────────────┘    └─────────────────┘
+                                        │
+                                        ▼
+                                ┌─────────────────┐
+                                │ Azure OpenAI    │
+                                │ - GPT-4.1-mini  │
+                                │ - Embeddings    │
+                                └─────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────────┐
+                              │ In-Memory Vector    │
+                              │ Store (Semantic     │
+                              │ Kernel)             │
+                              └─────────────────────┘
+```
 
 ### Core Services
 - **Products Service**: Main API service with search endpoints and AI integration
