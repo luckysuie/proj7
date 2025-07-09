@@ -47,7 +47,8 @@ For each scenario folder (e.g., scenarios/01-SemanticSearch, scenarios/03-Realti
      d. Use the search UI to perform a semantic search.
    - After each page loads, take a full-page screenshot in JPG format.
 
-5. Save screenshots under docs/images:
+5. Save screenshots under docs/images as JPG images (not txt files):
+   - Ensure screenshots are saved in JPG format, not as text files.
    - Use descriptive filenames:
      • dashboard.jpg
      • products.jpg
