@@ -204,6 +204,20 @@ You may want to consider additional security measures, such as:
 
 - Protecting the Azure Container Apps instance with a [firewall](https://learn.microsoft.com/azure/container-apps/waf-app-gateway) and/or [Virtual Network](https://learn.microsoft.com/azure/container-apps/networking?tabs=workload-profiles-env%2Cazure-cli).
 
+## Want to know more?
+
+For detailed technical documentation about the real-time audio capabilities and components of this scenario, including implementation details, architecture patterns, and configuration guides, see the comprehensive documentation:
+
+**[📚 View Complete Technical Documentation](./docs/README.md)**
+
+The documentation includes:
+- Real-time audio integration with OpenAI GPT-4o  
+- Aspire orchestration for multiple service types
+- Blazor Server real-time communication
+- Audio processing and conversation management
+- Multi-model AI service configuration
+- Product context integration patterns
+
 ## Resources
 
 - [GPT-4o Realtime API Quickstart](https://learn.microsoft.com/azure/ai-services/openai/realtime-audio-quickstart)

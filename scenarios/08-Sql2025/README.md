@@ -152,6 +152,20 @@ You may want to consider additional security measures, such as:
 
 - Protecting the Azure Container Apps instance with a [firewall](https://learn.microsoft.com/azure/container-apps/waf-app-gateway) and/or [Virtual Network](https://learn.microsoft.com/azure/container-apps/networking?tabs=workload-profiles-env%2Cazure-cli).
 
+## Want to know more?
+
+For detailed technical documentation about the SQL Server 2025 vector capabilities and native vector search implementation of this scenario, including implementation details, database features, and configuration guides, see the comprehensive documentation:
+
+**[📚 View Complete Technical Documentation](./docs/README.md)**
+
+The documentation includes:
+- SQL Server 2025 native vector search capabilities
+- Vector data types and indexing strategies
+- Entity Framework Core vector integration
+- Modern database features and optimizations
+- Performance tuning for vector operations
+- Migration patterns from external vector stores
+
 ## Resources
 
 - [Deploy a .NET Aspire project to Azure Container Apps using the Azure Developer CLI (in-depth guide)](https://learn.microsoft.com/dotnet/aspire/deployment/azure/aca-deployment-azd-in-depth)
