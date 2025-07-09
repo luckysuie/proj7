@@ -35,26 +35,30 @@ For each scenario folder (e.g., scenarios/01-SemanticSearch, scenarios/03-Realti
      • Provide a high-level scenario summary
      • Link to screenshots
 
-4. Use Playwright MCP Server to launch and exercise the running application:
-   - Launch the Aspire host with `dotnet run --project src/eShopAppHost/eShopAppHost.csproj`.
+
+4. Use Playwright MCP Server to launch and exercise the running application, and capture real screenshots:
+   - Launch the Aspire host with `dotnet run --project src/eShopAppHost/eShopAppHost.csproj` from the scenario's `src` directory.
    - Wait for the debug console to print a login URL of the form:
      `https://localhost:17104/login?t=<token>`
-   - Navigate to that URL in Playwright.
-   - Simulate the following user flows:
+   - In Playwright, navigate to that URL and perform the following user flows:
      a. Log in via the token URL.
-     b. Open the Aspire Dashboard page.
-     c. Browse the Products listing page.
-     d. Use the search UI to perform a semantic search.
-   - After each page loads, take a full-page screenshot in JPG format.
+     b. Open the Aspire Dashboard page in the browser.
+     c. Browse the Products listing page in the browser.
+     d. Use the search UI to perform a semantic search in the browser.
+   - For each page (dashboard, products, search), wait for the page to fully load and take a real, full-page screenshot in JPG format (not a placeholder or text file).
+   - Ensure the screenshots capture the actual running UI, dashboards, and telemetry as rendered in the browser.
 
-5. Save screenshots under docs/images as JPG images (not txt files):
-   - Ensure screenshots are saved in JPG format, not as text files.
-   - Use descriptive filenames:
-     • dashboard.jpg
-     • products.jpg
-     • search.jpg
+5. Save screenshots under `docs/images` as JPG images:
+   - Save each screenshot as a real JPG image file (not a text file or placeholder).
+   - Use descriptive filenames for each scenario:
+     • dashboard.jpg (Aspire dashboard)
+     • products.jpg (Products listing)
+     • search.jpg (Semantic search results)
+   - Screenshots must be visually accurate and up-to-date, reflecting the current UI and features.
 
-6. At the end, update docs/README.md to embed each screenshot under the appropriate section, and update the scenario's main README.md to include a **Want to know more?** section linking to docs/README.md.
+
+6. At the end, update `docs/README.md` to embed each screenshot (using standard markdown image syntax) under the appropriate section, and update the scenario's main `README.md` to include a **Want to know more?** section linking to `docs/README.md`.
+   - Ensure that the documentation references the actual screenshots, not placeholders.
 
 Your output in the workspace should be, for each scenario:
 
