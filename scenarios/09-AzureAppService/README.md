@@ -49,7 +49,7 @@ This is the eShopLite Application running, performing a **Semantic Search**:
   flowchart TD
     subgraph "Azure App Service"
       store[Store Service]
-      products[Products Service-(SQLite DB internal)]
+      products[Products Service using SQLite DB internal]
     end
     ContainerRegistry[Container Registry]
     StorageAccount[Storage Account]
