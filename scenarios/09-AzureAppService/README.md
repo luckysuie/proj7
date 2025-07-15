@@ -49,27 +49,24 @@ This is the eShopLite Application running, performing a **Semantic Search**:
   flowchart TD
     subgraph "Azure App Service"
       store[Store Service]
-      products[Products Service using SQLite DB internal]
+      products[Products Service SQLite DB internal]
     end
     ContainerRegistry[Container Registry]
     StorageAccount[Storage Account]
     ManagedIdentity[Managed Identity]
-    OpenAI[Azure OpenAI\nChat + Embeddings]
-    AISearch[Azure AI Search\nVector Index]
-    LogAnalytics[Log Analytics]
+    AzureOpenAI[Azure OpenAI Chat + Embeddings]
+    InMemoryVectorDB[InMemory Vector DB]
 
     store --> products
+    store --> ManagedIdentity
 
     ContainerRegistry --> ManagedIdentity
-    ManagedIdentity --> OpenAI
-    ManagedIdentity --> AISearch
+    ManagedIdentity --> AzureOpenAI
+    ManagedIdentity --> InMemoryVectorDB
 
     products --> ManagedIdentity
-    products -->|semantic search| AISearch
-    products -->|generate embeddings + chat| OpenAI
-
-    store --> LogAnalytics
-    products --> LogAnalytics
+    products -->|semantic search| InMemoryVectorDB
+    products -->|generate embeddings + chat| AzureOpenAI
   ```
 
 ## Getting Started
