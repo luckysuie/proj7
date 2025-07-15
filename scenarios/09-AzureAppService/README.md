@@ -1,18 +1,28 @@
-[end of file]
-
 ## Want to know more?
 
 See [docs/README.md](./docs/README.md) for detailed architecture, feature documentation, and screenshots.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 
-## Description
+## Scenario: Deploying .NET Aspire Apps to Azure App Service
 
-**eShopLite - Semantic Search deploy to Azure AppSerfice** is a reference .NET application implementing an eCommerce site with Search features using vector search and vector indexes in the SQL Database Engine
+This scenario demonstrates how to deploy a .NET Aspire-based eShopLite application to **Azure App Service**, leveraging the latest platform features announced at Microsoft Build 2025. It is a practical demo for modernizing and running .NET Aspire multi-service applications on Azure's fully managed web hosting platform.
+
+### What's New: .NET Aspire on Azure App Service
+
+- **.NET Aspire support is now available in public preview for App Service on Linux!**
+- Developers can deploy multi-app/multi-service .NET Aspire applications directly to Azure App Service using the new Aspire App Service deployment provider.
+- The App Service provider translates your .NET Aspire application's topology into Azure App Service resources, supporting secure deployments and observability (with Aspire dashboard integration coming soon).
+- Take advantage of the new [Premium v4 plan](https://aka.ms/Build25/blog/Premiumv4) for enhanced performance, cost savings, and Availability Zone support.
+
+For more details, see the [official announcement](https://techcommunity.microsoft.com/blog/appsonazureblog/whats-new-in-azure-app-service-at-msbuild-2025/4412465) and [Getting Started with .NET Aspire on Azure App Service](https://aka.ms/Build25/blog/AspireAppService).
+
+---
+
+**eShopLite - Semantic Search deploy to Azure App Service** is a reference .NET Aspire application implementing an eCommerce site with advanced search features, now ready for deployment to Azure App Service.
 
 - [Features](#features)
 - [Architecture diagram](#architecture-diagram)
 - [Getting started](#getting-started)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 - Run solution
 - [Resources](#resources)
 - [Video Recordings](#video-recordings)
@@ -21,9 +31,19 @@ See [docs/README.md](./docs/README.md) for detailed architecture, feature docume
   - [Security Guidelines](#security-guidelines)
 - [Resources](#resources)
 
+## Features
+
+**GitHub CodeSpaces:** This project is designed to be opened in GitHub Codespaces as an easy way for anyone to deploy the solution entirely in the browser.
+
+This is the eShopLite Application running, performing a **Keyword Search**:
 
 ![eShopLite Application running doing search using keyword search](./images/05eShopLite-SearchKeyWord.gif)
 
+This is the eShopLite Application running, performing a **Semantic Search**:
+
+![eShopLite Application running doing search using keyword search](./images/06eShopLite-SearchSemantic.gif)
+
+## Architecture diagram
 
   ```mermaid
   flowchart TD
@@ -59,49 +79,9 @@ See [docs/README.md](./docs/README.md) for detailed architecture, feature docume
 
 ## Main Concepts in this Scenario
 
-This scenario demonstrates how to use [SQL Server 2025's Vector search and Vector index features](https://learn.microsoft.com/en-us/sql/relational-databases/vectors/vectors-sql-server?view=sql-server-ver17) in a .NET Aspire application. The main concepts and implementation details are:
+This scenario demonstrates how to use a .NET Aspire application to Azure to AppServices. The main concepts and implementation details are:
 
-- The .NET Aspire AppHost project creates the SQL Server 2025 instance directly using the container image `mcr.microsoft.com/mssql/server:2025-latest` from the Docker repository for SQL Server 2025: [Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/r/microsoft/mssql-server/).
-    
-    var sql = builder.AddSqlServer("sql")
-        .WithLifetime(ContainerLifetime.Persistent)
-        .AddDatabase("productsDb");
-    
-    var products = builder.AddProject<Projects.Products>("products")
-        .WithReference(productsDb)
-        .WaitFor(productsDb);    
-    ```
-
-- Using an embedding client, once the database is initialized and a set of sample products is added, a new vector field is completed using an embedding. This logic is in [`scenarios/08-Sql2025/src/Products/Models/DbInitializer.cs`](./src/Products/Models/DbInitializer.cs).
-
-- The `ProductApiActions` class ([`scenarios/08-Sql2025/src/Products/Endpoints/ProductApiActions.cs`](./src/Products/Endpoints/ProductApiActions.cs)) implements an `AISearch()` function that performs semantic search using [EFCore.SqlServer.VectorSearch](https://www.nuget.org/packages/EFCore.SqlServer.VectorSearch/9.0.0-preview.2#show-readme-container) functions:
-
-    ```csharp
-    public static async Task<IResult> AISearch(string search, Context db, EmbeddingClient embeddingClient, int dimensions = 1536)
-    {
-        Console.WriteLine("Querying for similar products...");
-    
-        var embeddingSearch = embeddingClient.GenerateEmbedding(search, new() { Dimensions = dimensions });
-        var vectorSearch = embeddingSearch.Value.ToFloats().ToArray();
-        var products = await db.Product
-            .OrderBy(p => EF.Functions.VectorDistance("cosine", p.Embedding, vectorSearch))
-            .Take(3)
-            .ToListAsync();
-    
-        var response = new SearchResponse
-        {
-            Products = products,
-            Response = products.Count > 0 ?
-                $"{products.Count} Products found for [{search}]" :
-                $"No products found for [{search}]"
-        };
-        return Results.Ok(response);
-    }
-    ```
-
-These components work together to enable semantic search over product data using SQL Server 2025's vector capabilities.
-
-The solution is in the `./src` folder, the main solution is **[eShopLite-Sql2025.slnx](./src/eShopLite-Sql2025.slnx)**.
+The solution is in the `./src` folder, the main solution is **[eShopLite-Aspire-AppService.slnx](./src/eShopLite-Aspire-AppService.slnx)**.
 
 ## Deploying
 
