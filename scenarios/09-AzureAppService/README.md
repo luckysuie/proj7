@@ -35,6 +35,10 @@ For more details, see the [official announcement](https://techcommunity.microsof
 
 **GitHub CodeSpaces:** This project is designed to be opened in GitHub Codespaces as an easy way for anyone to deploy the solution entirely in the browser.
 
+The Azure Resources provisioned by this scenario includes the Products and the Store services, which are deployed to Azure App Service:
+
+![ Products and the Store services, which are deployed to Azure App Service](./images/10AzureResources.png)
+
 This is the eShopLite Application running, performing a **Keyword Search**:
 
 ![eShopLite Application running doing search using keyword search](./images/05eShopLite-SearchKeyWord.gif)
