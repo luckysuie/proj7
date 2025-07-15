@@ -60,9 +60,10 @@ This is the eShopLite Application running, performing a **Semantic Search**:
     store --> products
     store --> ManagedIdentity
 
-    ContainerRegistry --> ManagedIdentity
+    ManagedIdentity --> ContainerRegistry
+    ManagedIdentity --> StorageAccount
     ManagedIdentity --> AzureOpenAI
-    ManagedIdentity --> InMemoryVectorDB
+    AzureOpenAI --> InMemoryVectorDB
 
     products --> ManagedIdentity
     products -->|semantic search| InMemoryVectorDB
