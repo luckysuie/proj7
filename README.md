@@ -25,12 +25,12 @@
 
 This project framework provides the following features:
 
-* Modern .NET application architecture with .NET Aspire
-* Various search capabilities (keyword search, semantic search)
-* Integration with multiple AI models (GPT-4o, DeepSeek-R1, etc.)
-* Vector database implementations (In Memory, Azure AI Search, Chroma DB and others)
-* Real-time audio capabilities
-* Model Context Protocol (MCP) server and client implementation
+- Modern .NET application architecture with .NET Aspire
+- Various search capabilities (keyword search, semantic search)
+- Integration with multiple AI models (GPT-4o, DeepSeek-R1, etc.)
+- Vector database implementations (In Memory, Azure AI Search, Chroma DB and others)
+- Real-time audio capabilities
+- Model Context Protocol (MCP) server and client implementation
 
 ## eShopLite Scenarios
 
@@ -47,7 +47,8 @@ The project includes several scenarios demonstrating different capabilities:
 | [07 - Agents Concurrent](./scenarios/07-AgentsConcurrent/) | Demonstrates concurrent agent orchestration and advanced AI agent collaboration patterns. | .NET Aspire, Multi-Agent Systems, Orchestration |
 | [08 - SQL Server 2025](./scenarios/08-Sql2025/) | Demonstrates the use of vector search and vector indexes in the SQL Database Engine | SQL Server 2025, Vector Search, Vector Indexes |
 | [09 - Azure App Service](./scenarios/09-AzureAppService/) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure App Service, using SQLite for data and integrating AI search. | Azure App Service, .NET Aspire, OpenAI, SQLite |
-| [10 - Azure Functions (Coming Soon!)](./scenarios/10-AzureFunctions/) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure using .NET Aspire and Azure . | Azure Functions, .NET Aspire, OpenAI, SQL2025 |
+| [10 - A2A Network](./scenarios/10-A2ANet/) | Demonstrates advanced agent-to-agent (A2A) communication and orchestration patterns in .NET Aspire, including multi-agent collaboration and reasoning. | .NET Aspire, Multi-Agent Systems, A2A Protocol |
+| [20 - Azure Functions (Coming Soon!)](./scenarios/20-AzureFunctions/) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure using .NET Aspire and Azure . | Azure Functions, .NET Aspire, OpenAI, SQL2025 |
 
 ## Getting Started
 
@@ -61,11 +62,13 @@ The project includes several scenarios demonstrating different capabilities:
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Azure-Samples/eShopLite.git
    ```
 
 1. Navigate to the scenario directory of interest:
+
    ```bash
    cd eShopLite/scenarios/[scenario-folder]
    ```
@@ -123,7 +126,6 @@ The Aspire Dashboard to check the running services:
 The Azure Resource Group with all the deployed services:
 
 ![Azure Resource Group with all the deployed services](./images/10AzureResources.png)
-
 
 ## Resources
 
