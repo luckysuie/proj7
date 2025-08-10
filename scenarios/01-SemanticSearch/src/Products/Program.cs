@@ -15,7 +15,7 @@ builder.AddServiceDefaults();
 builder.Services.AddProblemDetails();
 
 // Add DbContext service
-builder.AddSqlServerDbContext<Context>("sqldb");
+builder.AddSqlServerDbContext<Context>("productsDb");
 
 // in dev scenarios rename this to "openaidev", and check the documentation to reuse existing AOAI resources
 var azureOpenAiClientName = "openai";
