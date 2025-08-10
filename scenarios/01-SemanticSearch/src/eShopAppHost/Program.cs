@@ -2,13 +2,18 @@ using Azure.Provisioning.CognitiveServices;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sqldb = builder.AddSqlServer("sql")
+var sql = builder.AddSqlServer("sql")
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithImageTag("2025-latest")
+    .WithEnvironment("ACCEPT_EULA", "Y");
+
+var productsDb = sql
     .WithDataVolume()
-    .AddDatabase("sqldb");
+    .AddDatabase("productsDb");
 
 var products = builder.AddProject<Projects.Products>("products")
-    .WithReference(sqldb)
-    .WaitFor(sqldb);
+    .WithReference(productsDb)
+    .WaitFor(productsDb);
 
 var store = builder.AddProject<Projects.Store>("store")
     .WithReference(products)
