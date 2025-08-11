@@ -1,3 +1,5 @@
+# eShopLite
+
 [![GitHub license](https://img.shields.io/github/license/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/blob/main/LICENSE)
 [![GitHub contributors](https://img.shields.io/github/contributors/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/graphs/contributors/)
 [![GitHub issues](https://img.shields.io/github/issues/azure-samples/eshoplite.svg)](https://github.com/azure-samples/eshoplite/issues/)
@@ -11,8 +13,6 @@
 [![Azure AI Community Discord](https://dcbadge.vercel.app/api/server/ByRwuEEgH4)](https://aka.ms/ai-discord/dotnet)
 
 [![Azure AI Foundry GitHub Discussions](https://img.shields.io/badge/Discussions-Azure%20AI%20Foundry-blueviolet?logo=github&style=for-the-badge)](https://aka.ms/ai-discussions/dotnet)
-
-# eShopLite
 
 **eShopLite** is a set of reference .NET applications implementing an eCommerce site with features like Semantic Search, Model Context Protocol (MCP), Reasoning models, vector databases, and more.
 
@@ -48,7 +48,8 @@ The project includes several scenarios demonstrating different capabilities:
 | [08 - SQL Server 2025](./scenarios/08-Sql2025/) | Demonstrates the use of vector search and vector indexes in the SQL Database Engine | SQL Server 2025, Vector Search, Vector Indexes |
 | [09 - Azure App Service](./scenarios/09-AzureAppService/) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure App Service, using SQLite for data and integrating AI search. | Azure App Service, .NET Aspire, OpenAI, SQLite |
 | [10 - A2A Network](./scenarios/10-A2ANet/) | Demonstrates advanced agent-to-agent (A2A) communication and orchestration patterns in .NET Aspire, including multi-agent collaboration and reasoning. | .NET Aspire, Multi-Agent Systems, A2A Protocol |
-| [20 - Azure Functions (Coming Soon!)](./scenarios/20-AzureFunctions/) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure using .NET Aspire and Azure . | Azure Functions, .NET Aspire, OpenAI, SQL2025 |
+| [11 - GitHub Models](./scenarios/11-GitHubModels/) | Local-first AI development using GitHub Models during local runs, with automatic switch to Azure OpenAI when deployed. | .NET Aspire, GitHub Models, Azure OpenAI |
+| 20 - Azure Functions (Coming Soon!) | Shows how to deploy a .NET Aspire multi-service eCommerce app to Azure using .NET Aspire and Azure. | Azure Functions, .NET Aspire, OpenAI, SQL2025 |
 
 ## Getting Started
 
