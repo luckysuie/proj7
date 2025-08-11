@@ -61,17 +61,17 @@ When you publish/deploy (see Scenario 01), the app uses Azure OpenAI deployments
 ## Architecture (local)
 
 ```mermaid
-graph TD
+flowchart TD
   A[Store (Blazor UI)] --> B[Products API]
-  B -->|Chat + Embeddings| C[GitHub Models API\n<https://models.inference.ai.azure.com>]
+  B -->|Chat + Embeddings| C[GitHub Models API<br/>https://models.inference.ai.azure.com]
 
-  subgraph Local Development
+  subgraph Local_Development
     A
     B
   end
 
-  classDef cloud fill:#E6F7FF,stroke:#0366d6,color:#111;
-  class C cloud;
+  classDef cloud fill:#E6F7FF,stroke:#0366d6,color:#111
+  class C cloud
 ```
 
 ### Request flow (local)
