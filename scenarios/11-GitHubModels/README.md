@@ -62,7 +62,7 @@ When you publish/deploy (see Scenario 01), the app uses Azure OpenAI deployments
 
 ```mermaid
 flowchart TD
-  A[Store (Blazor UI)] --> B[Products API]
+  A[Store Blazor UI] --> B[Products API]
   B -->|Chat + Embeddings| C[GitHub Models API<br/>https://models.inference.ai.azure.com]
 
   subgraph Local_Development
