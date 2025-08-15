@@ -6,10 +6,10 @@ This repository contains a simplified e‑commerce sample (Store frontend + Prod
 
 * Orchestration and service discovery using **.NET Aspire AppHost**
 * Three different product search experiences in the Store UI
-* Re–use of SQL Server 2025 vector search capabilities (single mention, no deep SQL setup guidance here)
+* Re–use of SQL Server 2025 vector search capabilities (single mention). For detailed guidance about SQL Server 2025 vector features, indexing, and setup, see the Scenario 08 documentation: `../08-Sql2025/README.md`.
 * Optional Azure Functions façade for semantic search
 
-> NOTE: Detailed inner workings of SQL Server 2025 vector indexes and setup are out of scope in this README. We only rely on its vector search capability. See Scenario 01 Guidance & Costs for links and operational considerations.
+> NOTE: Detailed inner workings of SQL Server 2025 vector indexes and setup are out of scope in this README. For comprehensive guidance about SQL Server 2025 vector capabilities and setup, please refer to Scenario 08: `../08-Sql2025/README.md`.
 
 ## Table of contents
 
@@ -150,7 +150,7 @@ Provide `SemanticSearchFunctionEndpoint` and `ProductEndpoint` if not using AppH
 | Semantic (Direct) | Selector: Semantic (API) | `ProductApiActions` semantic endpoint | Embedding + vector distance query. |
 | Semantic (Function) | Selector: Semantic (Azure Function) | `SearchFunction.cs` | Separate function; illustrates alternative deployment boundary / scaling unit. |
 
-All semantic paths execute a SQL 2025 vector similarity search. Only one brief mention of SQL 2025 is kept here per requirements.
+All semantic paths execute a SQL 2025 vector similarity search. For full technical documentation and implementation details, see Scenario 08: `../08-Sql2025/README.md`.
 
 ## Scenario 01 Guidance & Costs
 
