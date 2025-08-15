@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "ConnectionStrings__productsDb": "Server=localhost,1433;Database=productsDb;User Id=sa;Password=Your_password123;TrustServerCertificate=true;",
+    "SEMANTIC_SEARCH_USE_EMBEDDINGS": "false",
+    "SEMANTIC_SEARCH_TOP_DEFAULT": "10"
+  }
+}
