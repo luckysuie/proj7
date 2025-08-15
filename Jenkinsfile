@@ -5,14 +5,14 @@ pipeline{
     }
     tools
     {
-        msbuild 'MSBuild'
+        msbuild 'MSBuild' 
         nuget 'NuGet'
     }
     stages {
         stage('Git Checkout') {
             steps {
                 echo 'Checking out code from Git...'
-                git url: https://github.com/luckysuie/proj7.git, branch: 'main'
+                git branch: 'main', url: 'https://github.com/luckysuie/proj7.git'
             }
         }
         stage('dotnet restore') {
