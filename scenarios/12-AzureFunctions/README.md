@@ -110,18 +110,6 @@ sequenceDiagram
 | `src/eShopServiceDefaults` | Shared service discovery + resilience registrations (`AddServiceDefaults`). |
 | `tests` projects | Unit tests (`Products.Tests`, `SemanticSearch.Tests`). |
 
-## Configuration
-
-Primary settings affecting search:
-
-| Setting | Where | Description |
-| ------- | ----- | ----------- |
-| `SemanticSearchFunctionEndpoint` | Store `appsettings.*` | Optional override of service discovery for the Azure Function (e.g. `http://localhost:7071/`). |
-| `ProductEndpoint` | Store `appsettings.*` | Legacy; usually replaced by service discovery `https+http://products`. |
-| Connection strings | Function & Products | Access to SQL Server instance containing product + vector data. |
-
-When using Aspire service discovery you can omit concrete host/ports and use `https+http://{servicename}` URIs in `BaseAddress`.
-
 ## Running locally
 
 1. Build & start via AppHost (preferred unified experience):
@@ -132,23 +120,13 @@ dotnet run --project src/eShopAppHost
 
 The dashboard lists services (Store, Products, SemanticSearchFunction, SQL). Open the Store UI, navigate to Search page.
 
-1. Or run individually:
-
-```powershell
-dotnet run --project src/Products
-func start --csharp src/SemanticSearchFunction  # or use VS Code Azure Functions tooling
-dotnet run --project src/Store
-```
-
-Provide `SemanticSearchFunctionEndpoint` and `ProductEndpoint` if not using AppHost discovery.
-
 ## Search modes in detail
 
 | Mode | Trigger | Code Path | Notes |
 | ---- | ------- | --------- | ----- |
 | Keyword | Selector: Keyword | `ProductApiActions` (standard endpoint) | Simple filter / LIKE logic. |
-| Semantic (Direct) | Selector: Semantic (API) | `ProductApiActions` semantic endpoint | Embedding + vector distance query. |
-| Semantic (Function) | Selector: Semantic (Azure Function) | `SearchFunction.cs` | Separate function; illustrates alternative deployment boundary / scaling unit. |
+| Semantic (WebAPI) | Selector: Semantic (API) | `ProductApiActions` semantic endpoint | Embedding + vector distance query. |
+| Semantic (Function) | Selector: Semantic (Azure Function) | `SearchFunction.cs` | Embedding + vector distance query. |
 
 All semantic paths execute a SQL 2025 vector similarity search. For full technical documentation and implementation details, see Scenario 08: `../08-Sql2025/README.md`.
 
@@ -160,32 +138,3 @@ Scenario 01 (this repository baseline) guidance, including cost considerations (
 Summary:
 
 * Azure Function semantic search adds an independent scaling surface (can scale independently from Products service).
-* Direct semantic search keeps latency slightly lower (1 less network hop) but couples functionality to Products deployment cadence.
-* Use configuration to switch between service discovery and explicit endpoints for local debugging.
-
-## Troubleshooting
-
-| Issue | Tip |
-| ----- | --- |
-| Service name not resolving | Ensure running under AppHost or supply explicit endpoints. |
-| Empty semantic results | Verify vectors initialized and embeddings dimension matches configuration. |
-| Function 404 | Check route: `/api/semanticsearch` and that function host is running. |
-| SSL issues locally | Use `https+http://` scheme for service discovery URIs or trust dev certs. |
-
-## Contributing
-
-Pull requests welcome. Ideas:
-Pull requests welcome. Ideas:
-
-* Health checks exposure & dashboards
-* Add caching layer for embeddings
-* Add benchmark comparing direct vs function semantic search latency
-* UI toggle to show raw vector score
-
-## License
-
-MIT – see [LICENSE](./LICENSE)
-
----
-
-Historical / deep SQL vector feature docs were removed to keep README focused. Only vector search capability mention retained per request.
