@@ -15,7 +15,7 @@ pipeline{
             }
             stage('Restore NuGet Packages') {
                 steps {
-                    echo 'Restoring NuGet packages...'
+                    echo 'Restoring NuGet packagesss...'
                     bat 'nuget restore proj7.sln'
                 }
             }
